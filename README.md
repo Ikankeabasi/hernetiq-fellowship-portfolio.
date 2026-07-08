@@ -1,1 +1,0 @@
-# hernetiq-fellowship-portfolio.
