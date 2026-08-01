@@ -1,5 +1,4 @@
-# Week 4 – Session 7 & Session 8
-## MedVitals AI – Cloud Infrastructure Security
+# Week 4 –  MedVitals AI – Cloud Infrastructure Security
 
 This folder contains my deliverables for Week 4 of the HerNetIQ AI Security Fellowship (Cohort 1).
 
@@ -22,7 +21,7 @@ This folder contains my deliverables for Week 4 of the HerNetIQ AI Security Fell
   - Screenshots
 
 ### 3. Screenshots
-The `images/` folder contains the screenshots captured during the lab.
+The `Screenshots` folder contains the evidence screenshots captured during the lab.
 
 ## Skills Demonstrated
 
