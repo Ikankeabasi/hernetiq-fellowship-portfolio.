@@ -11,10 +11,10 @@ This repository documents my hands-on learning journey throughout the HerNetIQ A
 | Week 1 | 4-Layer AI Architecture | AI Architecture Diagram |
 | Week 2 | Defensive Python & JSON Security Log Analysis | Code Review Findings & CloudTrail IOC Analysis |
 | Week 3 | Cloud Security Core (IAM) | Hardened MedVitals IAM Policy (JSON) |
-| Week 4 | Coming Soon | Coming Soon |
+| Week 4 | MedVitals AI – Cloud Infrastructure Security | Incident Timeline Report · Medium Technical Walkthrough · Level 1 Portfolio Completed |
+
 
 ## Skills Being Built
-
 - AI Security fundamentals
 - AI architecture risk analysis
 - Reading Python configuration files for security flaws
@@ -22,10 +22,18 @@ This repository documents my hands-on learning journey throughout the HerNetIQ A
 - Detecting overly permissive IAM policies
 - Applying the Principle of Least Privilege
 - Writing secure IAM policies in JSON
+- Understanding IAM users, roles, and policies
+- AWS CloudTrail log analysis
 - Reading CloudTrail JSON security logs using the IOC 5Ws framework
-- Cloud incident investigation and analysis
-- Security documentation and reporting
+- Cloud incident investigation and attack timeline reconstruction
+- Identifying Indicators of Compromise (IoCs)
+- Secrets management using environment variables
+- Cloud infrastructure security
+- Security documentation and incident reporting
+- Git and GitHub workflow for security projects
 - GitHub portfolio management
+- Technical writing and security communication
+
 
 ## About Me
 
