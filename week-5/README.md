@@ -37,7 +37,3 @@ I successfully completed Levels 1 and 2.
 I attempted Level 3 but have not successfully completed it yet. Levels 4 and 5 have not been reached.
 
 This documentation reflects my actual progress.
-
-## Evidence
-
-Screenshots for the completed levels are stored in the `evidence/` folder.
