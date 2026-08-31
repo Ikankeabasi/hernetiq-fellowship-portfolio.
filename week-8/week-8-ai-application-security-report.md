@@ -1,4 +1,4 @@
-# Week 8 — AI/API Security Findings Report
+# Week 8 — API Security Findings Report
 
 ## Incident Summary
 
@@ -41,7 +41,8 @@ If a client-controlled customer identifier could be changed and the server retur
 
 **Screenshot: BOLA testing / unauthorized object access**
 
-> [INSERT LAB SCREENSHOT HERE]
+<img width="1829" height="597" alt="Screenshot 2026-08-31 234027" src="https://github.com/user-attachments/assets/4a4d501f-c626-47a0-98f3-20aafab0dfcf" />
+
 
 ## Impact
 
@@ -94,11 +95,8 @@ This is known as **indirect prompt injection** because the malicious instruction
 
 **Screenshot: Product content containing the malicious instruction**
 
-> [INSERT LAB SCREENSHOT HERE]
+<img width="1919" height="963" alt="Screenshot 2026-08-31 234354" src="https://github.com/user-attachments/assets/f89dcef7-a9b0-4c84-b5ee-f482cbab236c" />
 
-**Screenshot: AI assistant behaviour after processing the retrieved content**
-
-> [INSERT LAB SCREENSHOT HERE]
 
 ## Impact
 
@@ -109,6 +107,7 @@ Indirect prompt injection could potentially cause the AI assistant to:
 - Ignore the intended purpose of retrieved content
 - Attempt actions outside its intended security boundary
 - Increase the risk of exposing information if the AI has unnecessary access to sensitive data
+
 
 ## Root Cause
 
@@ -138,11 +137,8 @@ Without effective rate limiting, an attacker could repeatedly send requests to t
 
 When this weakness is combined with an authorization problem, repeated requests could make data collection faster and increase the overall impact of the vulnerability.
 
-## Evidence
 
-**Screenshot: Repeated-request or rate-limiting testing**
 
-> [INSERT LAB SCREENSHOT HERE]
 
 ## Impact
 
@@ -228,31 +224,17 @@ The following controls are recommended:
 
 ---
 
-# Screenshots and Evidence
 
-The completed lab evidence should include screenshots showing:
-
-1. CartBot running in the lab environment
-2. The BOLA or object-level authorization testing result
-3. The malicious product content used for indirect prompt injection
-4. The AI assistant's behaviour after processing the content
-5. Repeated-request or rate-limiting testing
-6. The completed Level 3 remediation or configuration changes
-7. The GitHub commit showing the completed Level 3 work
-
-> Insert each screenshot directly under the relevant vulnerability or evidence section above.
-
----
 
 # GitHub Evidence
 
 **Level 3 Commit Link:**
 
-> [INSERT YOUR LEVEL 3 COMMIT LINK HERE]
+(https://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033)
 
 **Related Threat Model:**
 
-[API Security Threat Model](./api-security-threat-model.md)
+https://github.com/Ikankeabasi/hernetiq-fellowship-portfolio./blob/main/week-8/api-security-threat-model.md
 
 ---
 
