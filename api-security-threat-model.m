@@ -1,14 +1,7 @@
-# Level 3 — Part 6 & Part 7: API Security Threat Model
-
-## HerNetIQ AI Security Fellowship · Cohort 1 · 2026
-
-**Level:** AI Security Defense Lab — Level 3  
-**Domain:** Application & API Security  
-**Application:** CartBot AI
-
+# Level 3 —  API Security Threat Model
 ---
 
-# Part 6 — Complete Your API Security Threat Model
+# API Security Threat Model
 
 Based on the investigation across Tasks 1–5.
 
@@ -36,24 +29,3 @@ The findings are classified as follows:
 | **Vulnerability 1** | **OWASP API1:2023 — Broken Object Level Authorization** | The API exposes an object identifier such as `customer_id` but fails to verify that the requester is authorized to access that specific customer's object/data. |
 | **Vulnerability 2** | **MITRE ATLAS AML.T0051 — LLM Prompt Injection (Indirect)** | Adversarial instructions are introduced into the LLM's input through external content. In CartBot, the malicious instruction is hidden inside the P003 product description that the AI later reads. |
 | **Vulnerability 3** | **MITRE ATLAS AML.T0054 — LLM Data Exfiltration** | The AI system's legitimate access channel is abused to extract data that should not be disclosed, including through automated/scripted requests at scale. |
-
-## Add These to the Threat Model
-
-```text
-OWASP: API1:2023 — Broken Object Level Authorization
-MITRE ATLAS: AML.T0051 — LLM Prompt Injection (Indirect)
-MITRE ATLAS: AML.T0054 — LLM Data Exfiltration
-```
-
----
-
-## Security Assessment Summary
-
-The Level 3 attack chain demonstrates that the AI model is not the only security boundary that matters. The underlying API must enforce identity, authorization and request limits independently of what the model is instructed to do. The CartBot scenario combines a traditional API authorization failure with indirect prompt injection and scalable data exfiltration.
-
-The key defensive principle is **defence in depth**: even if the AI is successfully manipulated by malicious product content, the API should still refuse unauthorized customer-data requests because the requester has not passed the required identity and authorization checks.
-
----
-
-**Source basis:** AI Security Defense Lab — Level 3 walkthrough and the CartBot Level 3 source code.  
-**Status:** Parts 6 and 7 completed; Task 6 patch implementation and verification remain separate hands-on work.
