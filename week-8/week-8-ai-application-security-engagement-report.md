@@ -1,229 +1,281 @@
-# AI/API Security Findings Report
+# Week 8 — AI/API Security Findings Report
 
-## CartBot AI Security Defense Lab — Level 3
+## Incident Summary
 
-**HerNetIQ AI Security Fellowship · Cohort 1 · 2026**  
-**Week 8 · AI Security / Application Security**
+During Level 3 of the AI Security Defense Lab, I assessed CartBot, an e-commerce application with customer and seller functionality, backend API services, customer and product data, and an AI shopping assistant.
 
----
+The assessment focused on how the application handles identity, authorization, customer-controlled data, product content consumed by the AI assistant, and request volume.
 
-## 1. Introduction
-
-This report documents the security findings identified during Level 3 of the AI Security Defense Lab.
-
-The lab focused on the CartBot application, an e-commerce platform that uses an API and an AI shopping assistant. The investigation examined how customer requests, authentication, authorization, customer data, product information, and AI-generated responses interact within the application.
-
-The assessment identified security weaknesses involving object-level authorization, indirect prompt injection, and unrestricted request abuse.
+The investigation identified multiple security weaknesses involving broken object-level authorization, unsafe trust of client-controlled information, indirect prompt injection exposure, and unrestricted resource consumption.
 
 ---
 
-## 2. Scope
+# Scope
 
-The investigation focused on:
+The assessment covered the following components and security areas:
 
-- Customer and seller access to the CartBot application.
-- Authentication and authorization controls.
-- Customer and order data access.
-- Client-supplied identifiers.
-- Product descriptions consumed by the AI assistant.
-- Indirect prompt injection risks.
-- Rate limiting and large-scale request abuse.
-- AI-specific data and cost exposure.
-
----
-
-## 3. Finding 1 — Broken Object Level Authorization (BOLA)
-
-### Description
-
-A Broken Object Level Authorization vulnerability was identified in the CartBot API.
-
-The application trusted a client-supplied customer identifier instead of independently verifying whether the authenticated requester was authorized to access the requested customer's data.
-
-This meant that changing the customer identifier could allow access to information belonging to another customer.
-
-### Evidence
-
-**Screenshot: Customer A accessing another customer's data**
-
-> **[INSERT SCREENSHOT HERE]**
-
-### Security Impact
-
-This vulnerability could allow an attacker or authenticated user to access:
-
-- Another customer's order information.
-- Customer data that should remain private.
-- Information outside the user's authorized security boundary.
-
-### Root Cause
-
-The vulnerable configuration included:
-
-```text
-TRUST_CUSTOMER_ID_HEADER = True
-REQUIRE_JWT_VALIDATION = False
-JWT_SECRET = None
-```
-
-The application therefore trusted unsafe client-controlled information instead of enforcing proper authentication and server-side authorization.
-
-### Classification
-
-**OWASP API Security Top 10:**  
-**API1:2023 — Broken Object Level Authorization**
+- Customer and seller access to CartBot
+- Authentication and identity validation
+- Authorization and object ownership checks
+- Customer and order information
+- Client-supplied identifiers
+- CartBot API endpoints
+- Product descriptions consumed by the AI assistant
+- Indirect prompt injection risks
+- Rate limiting and excessive request abuse
+- AI-related data exposure and financial impact
 
 ---
 
-## 4. Finding 2 — Indirect Prompt Injection
+# Vulnerability 1 — Broken Object Level Authorization (BOLA)
 
-### Description
+## What Happened
 
-The CartBot AI assistant used product descriptions as information when generating responses.
+The application failed to properly verify whether an authenticated customer was authorized to access a specific customer's data.
 
-A malicious instruction was placed inside the description of the P003 USB-C Hub product. When the AI application retrieved and processed the product description, the attacker-controlled instruction entered the model's context.
+The security problem was not simply whether the user could log in successfully. The server also needed to verify whether the requested object actually belonged to the authenticated user.
 
-This is classified as **indirect prompt injection** because the malicious instruction was not sent directly through the AI chat interface. Instead, it was embedded inside content that the AI later retrieved and consumed.
+If a client-controlled customer identifier could be changed and the server returned another customer's information without independently checking ownership, this would create a Broken Object Level Authorization vulnerability.
 
-### Evidence
+## Evidence
 
-**Screenshot: Malicious instruction inside product content**
+**Screenshot: BOLA testing / unauthorized object access**
 
-> **[INSERT SCREENSHOT HERE]**
+> [INSERT LAB SCREENSHOT HERE]
 
-**Screenshot: AI assistant processing the affected product information**
+## Impact
 
-> **[INSERT SCREENSHOT HERE]**
+A successful attacker could potentially access information belonging to another customer, including private customer or order information.
 
-### Security Impact
+This could result in:
 
-Indirect prompt injection can cause an AI system to:
+- Unauthorized access to customer data
+- Privacy breaches
+- Exposure of sensitive order information
+- Loss of customer trust
+- Reputational damage to the organization
 
-- Follow attacker-controlled instructions.
-- Ignore the intended purpose of retrieved content.
-- Produce manipulated responses.
-- Attempt actions outside the intended security boundary.
-- Contribute to sensitive data exposure when the AI has excessive access.
+## Root Cause
 
-### Classification
+The root cause was trusting client-controlled information instead of making a server-side authorization decision based on the authenticated identity and ownership of the requested object.
 
-**MITRE ATLAS:**  
-**AML.T0051 — LLM Prompt Injection (Indirect)**
+Authentication answers **who the user is**.
 
----
+Authorization must answer **whether that user is allowed to access this specific object**.
 
-## 5. Finding 3 — Automated Data Exposure and Unrestricted Request Abuse
+## Recommendation
 
-### Description
+The application should:
 
-The CartBot application also contained a request-abuse risk because rate limiting was disabled.
+- Validate the user's identity using a trusted authentication mechanism
+- Derive the customer's identity from the validated session or token
+- Perform server-side ownership checks before returning customer or order data
+- Never trust a client-supplied identifier as proof that the requester owns the requested object
 
-The vulnerable configuration included:
+## Classification
 
-```text
-RATE_LIMIT_ENABLED = False
-```
-
-When combined with the BOLA weakness, an attacker could repeatedly change customer identifiers and automate requests against the API.
-
-### Evidence
-
-**Screenshot: Rate limiting or repeated request testing**
-
-> **[INSERT SCREENSHOT HERE]**
-
-### Security Impact
-
-The weakness could allow:
-
-- Automated collection of customer information.
-- Large-scale unauthorized requests.
-- Increased API resource consumption.
-- Service degradation.
-- Increased AI and infrastructure costs.
-
-For AI systems, repeated expensive requests can also create **Denial-of-Wallet** exposure because the organization may pay for model inference and related infrastructure resources.
-
-### Classification
-
-**OWASP API Security Top 10:**  
-**API4:2023 — Unrestricted Resource Consumption**
-
-**MITRE ATLAS:**  
-**AML.T0054 — LLM Data Exfiltration**
+**OWASP API Security Top 10:** API1:2023 — Broken Object Level Authorization
 
 ---
 
-## 6. Remediation
+# Vulnerability 2 — Indirect Prompt Injection
 
-The following security controls were applied or recommended:
+## What Happened
 
-### Authentication and Authorization
+CartBot's AI shopping assistant consumed product information before generating responses.
 
-- Enable cryptographic JWT validation.
-- Do not trust raw client-supplied customer identifiers as proof of identity.
-- Derive customer identity from validated authentication information.
-- Verify object ownership on the server before returning customer or order data.
+This created an AI security trust boundary because product descriptions could contain attacker-controlled content.
 
-### Rate Limiting
+A malicious instruction placed inside a product description could later be retrieved by the application and included in the AI model's context. If the AI treated that content as an instruction instead of untrusted data, the attacker could influence the model's behaviour.
 
-- Enable rate limiting.
-- Restrict excessive requests from individual users or clients.
-- Monitor repeated object-access attempts.
+This is known as **indirect prompt injection** because the malicious instruction reaches the AI through content that the application retrieves or processes rather than being sent directly through the AI chat interface.
 
-### AI Security
+## Evidence
 
-- Treat product descriptions and retrieved content as untrusted data.
-- Do not allow retrieved content to override trusted application instructions.
-- Limit the data and actions available to the AI assistant.
-- Apply authorization and tenant boundaries before information enters the AI context.
+**Screenshot: Product content containing the malicious instruction**
 
----
+> [INSERT LAB SCREENSHOT HERE]
 
-## 7. Screenshots and Evidence Checklist
+**Screenshot: AI assistant behaviour after processing the retrieved content**
 
-The following screenshots should be included as evidence from the completed lab:
+> [INSERT LAB SCREENSHOT HERE]
 
-1. **CartBot application or lab environment**
-   - [INSERT SCREENSHOT]
+## Impact
 
-2. **BOLA / unauthorized customer-data access**
-   - [INSERT SCREENSHOT]
+Indirect prompt injection could potentially cause the AI assistant to:
 
-3. **Indirect prompt injection evidence**
-   - [INSERT SCREENSHOT]
+- Follow attacker-controlled instructions
+- Generate manipulated responses
+- Ignore the intended purpose of retrieved content
+- Attempt actions outside its intended security boundary
+- Increase the risk of exposing information if the AI has unnecessary access to sensitive data
 
-4. **Rate-limiting or repeated-request evidence**
-   - [INSERT SCREENSHOT]
+## Root Cause
 
-5. **Patched or hardened configuration/code**
-   - [INSERT SCREENSHOT]
+The root cause was an insufficient separation between trusted application instructions and untrusted content consumed by the AI system.
 
-6. **GitHub commit showing the completed Level 3 changes**
-   - [INSERT SCREENSHOT OR COMMIT LINK]
+Retrieved product content should be treated as **data**, not automatically as authoritative instructions.
 
----
+## Recommendation
 
-## 8. GitHub Evidence
+The application should:
 
-**Level 3 Commit:**
-
-> **[INSERT YOUR LEVEL 3 GITHUB COMMIT LINK HERE]**
-
-**Threat Model:**
-
-[View the API Security Threat Model](./api-security-threat-model.md)
+- Treat retrieved product descriptions as untrusted content
+- Clearly separate trusted instructions from retrieved data
+- Limit the information and actions available to the AI assistant
+- Apply least privilege to AI tools and data access
+- Validate sensitive outputs before they are returned to users
 
 ---
 
-## 9. Conclusion
+# Vulnerability 3 — Unrestricted Resource Consumption
 
-Level 3 demonstrated that an AI application can contain both traditional application-security vulnerabilities and AI-specific security risks.
+## What Happened
 
-The CartBot investigation identified weaknesses in object-level authorization, trust of client-controlled information, indirect prompt injection, and unrestricted request abuse.
+The application did not adequately restrict how frequently a client could send requests.
 
-The main lesson from the lab is that securing an AI application requires more than securing the model itself. Authentication, authorization, data isolation, API controls, trust boundaries, retrieved content, and resource limits must all work together to protect the system and its users.
+Without effective rate limiting, an attacker could repeatedly send requests to the API and automate large numbers of operations.
+
+When this weakness is combined with an authorization problem, repeated requests could make data collection faster and increase the overall impact of the vulnerability.
+
+## Evidence
+
+**Screenshot: Repeated-request or rate-limiting testing**
+
+> [INSERT LAB SCREENSHOT HERE]
+
+## Impact
+
+Possible impacts include:
+
+- Excessive API resource consumption
+- Automated abuse at scale
+- Service degradation
+- Higher infrastructure costs
+- Increased AI/API usage costs
+
+For AI applications, repeated expensive operations can also create **Denial-of-Wallet** exposure because model inference and supporting infrastructure may generate direct financial costs.
+
+## Root Cause
+
+The root cause was the absence or ineffective implementation of controls that limit excessive request volume.
+
+## Recommendation
+
+The application should:
+
+- Enable rate limiting
+- Apply appropriate limits to expensive API and AI operations
+- Monitor unusual request volume
+- Detect automated abuse patterns
+- Apply additional controls where sensitive resources are involved
+
+## Classification
+
+**OWASP API Security Top 10:** API4:2023 — Unrestricted Resource Consumption
 
 ---
 
-**HerNetIQ AI Security Fellowship · Cohort 1 · 2026**
+# Overall Business Impact
+
+The identified weaknesses could affect CartBot at both the application-security and AI-security layers.
+
+If exploited in a real production environment, the organization could face:
+
+- Unauthorized exposure of customer information
+- Privacy and confidentiality violations
+- Loss of customer trust
+- Reputational damage
+- Increased infrastructure and AI operating costs
+- Potential large-scale automated abuse
+
+The combination of traditional API weaknesses and AI-specific weaknesses is particularly important because a modern AI application depends on more than the security of the model itself. Authentication, authorization, data isolation, trust boundaries, retrieved content, and resource controls must all work together.
+
+---
+
+# Root Cause Summary
+
+The main security problems identified during the assessment were:
+
+1. Trusting client-controlled information without sufficient server-side verification
+2. Failing to properly enforce object-level authorization
+3. Allowing untrusted content to influence the AI context without sufficient separation
+4. Insufficient controls against excessive request volume
+
+---
+
+# Recommendations Summary
+
+The following controls are recommended:
+
+1. **Server-Side Authorization**  
+   Verify object ownership before returning customer or order information.
+
+2. **Trusted Identity Validation**  
+   Derive identity from validated authentication mechanisms rather than client-controlled identifiers.
+
+3. **Tenant and Data Isolation**  
+   Ensure customers can access only their own authorized information.
+
+4. **AI Context Separation**  
+   Treat retrieved product content as untrusted data and keep it separate from trusted application instructions.
+
+5. **Least Privilege**  
+   Limit the information and actions available to the AI assistant.
+
+6. **Rate Limiting and Abuse Monitoring**  
+   Restrict excessive requests and monitor suspicious activity.
+
+---
+
+# Screenshots and Evidence
+
+The completed lab evidence should include screenshots showing:
+
+1. CartBot running in the lab environment
+2. The BOLA or object-level authorization testing result
+3. The malicious product content used for indirect prompt injection
+4. The AI assistant's behaviour after processing the content
+5. Repeated-request or rate-limiting testing
+6. The completed Level 3 remediation or configuration changes
+7. The GitHub commit showing the completed Level 3 work
+
+> Insert each screenshot directly under the relevant vulnerability or evidence section above.
+
+---
+
+# GitHub Evidence
+
+**Level 3 Commit Link:**
+
+> [INSERT YOUR LEVEL 3 COMMIT LINK HERE]
+
+**Related Threat Model:**
+
+[API Security Threat Model](./api-security-threat-model.md)
+
+---
+
+# Conclusion
+
+The Level 3 assessment demonstrated how traditional application-security vulnerabilities and AI-specific security risks can exist within the same application.
+
+The investigation showed the importance of understanding the application before simply assigning vulnerability labels. By following the flow of identity, authorization, objects, content, AI context, and requests, it became possible to identify where security boundaries could fail.
+
+The key lesson from this assessment is that securing an AI application requires more than securing the AI model. The surrounding API, authentication, authorization, data boundaries, retrieved content, and resource controls are equally important.
+
+---
+
+## Key Lessons Learned
+
+This Level 3 assessment demonstrated how to:
+
+- Understand an application's architecture before testing
+- Identify important assets and trust boundaries
+- Test object-level authorization
+- Distinguish authentication from authorization
+- Identify client-controlled values that require server-side verification
+- Understand indirect prompt injection through retrieved content
+- Recognize unrestricted resource consumption and Denial-of-Wallet risks
+- Connect traditional API security with AI application security
+- Document findings, impacts, root causes, and recommendations in a professional security report
