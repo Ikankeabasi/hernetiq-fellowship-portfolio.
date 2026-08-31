@@ -1,6 +1,3 @@
-# Level 3 —  API Security Threat Model
----
-
 # API Security Threat Model
 
 Based on the investigation across Tasks 1–5.
