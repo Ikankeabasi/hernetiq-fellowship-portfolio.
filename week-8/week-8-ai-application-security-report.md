@@ -16,7 +16,7 @@ The assessment examined authentication, object-level authorization, client-contr
 
 The findings demonstrate an important security principle: an AI application cannot be secured by protecting the model alone. The API, authorization layer, AI context, data access, and resource controls must work together.
 
-A Level 3 remediation commit was produced with JWT validation, removal of trusted client-supplied customer identity, rate limiting, and a restricted system prompt. The application code was changed to report `SECURITY_STATUS = "PATCHED"`. citehttps://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033
+A Level 3 remediation commit was produced with JWT validation, removal of trusted client-supplied customer identity, rate limiting, and a restricted system prompt. The application code was changed to report `SECURITY_STATUS = "PATCHED"`.
 
 ---
 
@@ -304,7 +304,7 @@ The important security lesson is that the AI layer and API layer cannot be treat
 | Indirect Prompt Injection | Untrusted product content could influence AI behaviour | Restrict the system prompt and treat retrieved product content as untrusted data |
 | Unrestricted Resource Consumption | `RATE_LIMIT_ENABLED = False` | Enable rate limiting at 30 requests per minute per authenticated session in the lab implementation |
 
-The Level 3 remediation commit records the implementation of JWT validation, rate limiting, and the restricted system prompt. citehttps://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033
+The Level 3 remediation commit records the implementation of JWT validation, rate limiting, and the restricted system prompt.
 
 ---
 
@@ -326,7 +326,7 @@ The remediation introduced the following controls:
 
 # 8. Verification Results
 
-The remediation commit changes the application security state from `VULNERABLE` to `PATCHED`. The committed code also contains the JWT validation and rate-limiting controls required by the lab. citehttps://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033
+The remediation commit changes the application security state from `VULNERABLE` to `PATCHED`. The committed code also contains the JWT validation and rate-limiting controls required by the lab.
 
 ### Evidence status
 
@@ -400,11 +400,11 @@ The central lesson is simple: **an AI application is only as secure as the bound
 
 ### Evidence 3 — Level 3 Remediation Commit
 
-urlLevel 3 remediation commithttps://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033
+https://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b527582b45a53ee62a4b4e0a01f48e0033
 
 ### Evidence 4 — Related Threat Model
 
-urlCartBot API Security Threat Modelhttps://github.com/Ikankeabasi/hernetiq-fellowship-portfolio./blob/main/week-8/api-security-threat-model.md
+https://github.com/Ikankeabasi/hernetiq-fellowship-portfolio./blob/main/week-8/api-security-threat-model.md
 
 ---
 
