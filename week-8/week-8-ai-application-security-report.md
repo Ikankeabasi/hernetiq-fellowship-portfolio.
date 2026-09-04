@@ -337,10 +337,16 @@ The remediation commit changes the application security state from `VULNERABLE` 
 | JWT validation implementation | Yes — visible in commit diff |
 | Rate limiting implementation | Yes — visible in commit diff |
 | Restricted system prompt | Yes — visible in commit diff |
-| Runtime test output / 4 PASS screenshot | **Not currently available in the saved evidence reviewed for this report** |
-| Bulk Harvest blocked screenshot | **Not currently available in the saved evidence reviewed for this report** |
+| Runtime test output / 4 PASS screenshot | Yes — available below here |
+| Bulk Harvest blocked screenshot | Yes — available below here |
 
-The final two screenshots should be inserted here if they were captured during the lab. They should not be recreated or represented as completed evidence if they were not actually captured.
+ ### Runtime test output / 4 PASS screenshot
+ <img width="1911" height="910" alt="Screenshot 2026-08-31 215414" src="https://github.com/user-attachments/assets/0a5f3404-dfef-4ffe-90ac-e1010791e850" />
+
+ ### Bulk Harvest blocked screenshot
+ <img width="1919" height="932" alt="Screenshot 2026-08-31 171930" src="https://github.com/user-attachments/assets/bc629d63-1682-48f4-bf25-7d1976a473ed" />
+
+
 
 ---
 
@@ -407,9 +413,3 @@ https://github.com/AibinuolaDamilola/ai-security-defense-lab/commit/120e27b52758
 https://github.com/Ikankeabasi/hernetiq-fellowship-portfolio./blob/main/week-8/api-security-threat-model.md
 
 ---
-
-## Security Assessment Status
-
-**Remediation implemented in the lab code. Runtime verification screenshots remain to be attached where available.**
-
-> **Changed code proves nothing. Evidence does.**
