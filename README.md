@@ -4,7 +4,7 @@
 
 This repository documents my hands-on learning journey throughout the HerNetIQ AI Security Fellowship. It contains weekly practical projects, security reports, architecture and threat-model documentation, cloud security exercises, AI security assessments, and technical write-ups that demonstrate my growing skills in AI Security and Cloud Security.
 
-The portfolio is organized week by week so that each stage of the fellowship can be followed from foundational concepts through practical security investigation, attack analysis, remediation, verification, and career positioning.
+The portfolio is organized week by week so that each stage of the fellowship can be followed from the foundational concepts through practical security investigation, exploitation analysis, remediation, and verification.
 
 ## Weekly Evidence
 
@@ -17,8 +17,7 @@ The portfolio is organized week by week so that each stage of the fellowship can
 | Week 5 | AI Agent Security | AI Agent Security Analysis · Prompt Injection Assessment · Incident Report · Security Patch |
 | Week 6 | AI Model & ML Supply-Chain Security | DataForge ML Threat Assessment · IOC Analysis · MITRE ATLAS Mapping · Model Loader Remediation |
 | Week 7 | Application & API Security | API Security Analysis · BOLA Assessment · Indirect Prompt Injection & Cross-Tenant Leakage Analysis |
-| Week 8 | AI Application & API Security — CartBot AI | Threat Model · AI Application Security Assessment Report · Remediation & Verification Evidence |
-| Week 9 | Mid-Fellowship Career Artifact & Portfolio Positioning | Portfolio Update · Career Self-Audit · LinkedIn Strategy · Profile Positioning |
+| Week 8 | AI Application & API Security — CartBot AI | Threat Model · API Security Threat Model · AI Application Security Assessment Report · Remediation & Verification Evidence |
 
 ## Week 1 — 4-Layer AI Architecture
 
@@ -156,70 +155,6 @@ The remediation work introduced JWT validation, server-side identity verificatio
 - [`week-8/api-security-threat-model.md`](./week-8/api-security-threat-model.md) — API security threat model and OWASP/MITRE ATLAS classification
 - [`week-8/week-8-ai-application-security-report.md`](./week-8/week-8-ai-application-security-report.md) — detailed CartBot AI security assessment and remediation report
 
-## Week 9 — Mid-Fellowship Career Artifact & Portfolio Positioning
-
-Week 9 focused on turning the work completed so far into a clearer career-facing portfolio. The week sits between Domain 3 and Domain 4 and combines a portfolio update, career self-audit, LinkedIn strategy, and profile positioning.
-
-The purpose of the week is not to introduce a new technical lab. Instead, it connects the evidence already produced across the fellowship to a clearer professional story: what I have worked on, what security areas I can demonstrate, how I communicate that work, and where someone can find the evidence.
-
-### Week 9 Work Completed / In Progress
-
-**1. AI Defense Lab `PORTFOLIO.md` update**
-
-The AI Defense Lab portfolio was reorganized for Levels 1–3 using a consistent nine-section structure:
-
-1. Scenario / Investigation
-2. Problem / Vulnerability
-3. Evidence
-4. Remediation
-5. Commit
-6. Outcome
-7. Skills Demonstrated
-8. Supporting Artifacts
-9. LinkedIn Case Study
-
-This structure makes each completed level easier to read as an evidence-based security case study without rewriting the underlying work.
-
-**2. Career artifact and LinkedIn content**
-
-The career artifact focuses on a self-audit of the skills and evidence developed so far, followed by a LinkedIn case-study post that communicates the practical security work to a professional audience.
-
-The positioning should remain evidence-led and should accurately describe the fellowship work as hands-on simulated security labs rather than claiming production incident experience that has not been demonstrated.
-
-**3. LinkedIn profile positioning**
-
-The profile update focuses on making the professional direction clear within a short first impression. The Week 9 positioning guidance emphasizes describing the security work and areas of focus rather than relying on phrases such as “Cybersecurity Enthusiast” or “AI Security Learner.”
-
-The profile positioning is centred on AI Security, with supporting areas including:
-
-- Cloud Security
-- Model Security
-- API Security
-- AI Application Security
-- Threat Modeling
-- Security Investigation
-- Security Remediation and Verification
-
-The profile should also point visitors toward evidence such as the GitHub portfolio and relevant technical work.
-
-### Week 9 Technical Evidence Context
-
-Week 9 builds its career positioning from the technical work already documented in the portfolio, including:
-
-- CloudTrail investigation and IAM least privilege in the MedVitals AI scenario
-- AI/ML model supply-chain security, Picklescan, and safer model serialization in the DataForge ML scenario
-- API security, BOLA, indirect prompt injection, rate limiting, threat modeling, Semgrep, remediation, and verification in the CartBot AI scenario
-
-These are hands-on fellowship lab scenarios and are presented as portfolio evidence of practical learning and security investigation.
-
-### Week 9 Career Positioning Principle
-
-A visitor should be able to understand quickly:
-
-> **What security work do I do, what areas have I worked across, and where can I see the evidence?**
-
-The goal is to make the portfolio and LinkedIn profile tell the same story without overstating experience.
-
 ## Skills Being Built
 
 - AI Security fundamentals
@@ -260,15 +195,13 @@ The goal is to make the portfolio and LinkedIn profile tell the same story witho
 
 ## Security Mindset Developed
 
-Across Weeks 1–9, the fellowship work has progressively moved from understanding AI architecture to investigating security behaviours, applying defensive controls, documenting evidence, and communicating the resulting work professionally.
+Across Weeks 1–8, the fellowship work has progressively moved from understanding AI architecture to investigating real security behaviours and applying defensive controls.
 
 A recurring principle throughout the portfolio is to ask:
 
 > **What does the system trust, where does that trust change, what can an attacker control, what happens when the system trusts the wrong thing, and what evidence proves the security control works?**
 
-Week 9 adds another practical question to that mindset:
-
-> **Can I communicate the security work accurately enough that another person can understand both the capability and the evidence behind it?**
+This approach is reflected in the progression from architecture analysis and cloud security through AI agents, ML supply-chain security, API security, threat modeling, vulnerability analysis, remediation, and verification.
 
 ## About Me
 
@@ -277,7 +210,7 @@ Week 9 adds another practical question to that mindset:
 **AI Security Fellow — HerNetIQ Cohort 1 (2026)**
 
 ### Background
-Computer Science student with a growing interest in AI Security, Cloud Security, SOC Operations, and Defensive Cybersecurity. I enjoy learning through practical labs and building a portfolio that reflects hands-on security work.
+Computer Science student with a growing interest in AI Security, Cloud Security, SOC Operations, and Defensive Cybersecurity. I enjoy learning through practical labs and building a portfolio that reflects real security work.
 
 ### Currently Building
 - Defensive AI Security
