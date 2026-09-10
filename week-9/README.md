@@ -26,5 +26,5 @@ The main security controls I looked at included authentication, tenant isolation
 
 ### Evidence
 
-- [RAG Pipeline Flow Diagram](./week-9-rag-pipeline-diagram.svg)
-- LinkedIn: _To be added after posting_
+- [RAG Pipeline Flow Diagram](./week-9-rag-pipeline-diagram.png)
+- LinkedIn: https://lnkd.in/p/eYsbFwet 
