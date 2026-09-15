@@ -84,6 +84,12 @@ This is the detailed professional assessment report. It documents the assessment
 
 The report also links to the supporting evidence and the Level 3 remediation commit.
 
+### 3. Threat Model Diagram
+
+**File:** [`Threat_Model_Diagram.png`](./Threat_Model_Diagram.png)
+
+This diagram provides a visual representation of the CartBot AI threat model, showing the external actors, application and AI components, data stores, data flows, trust boundary, and the seller-controlled/untrusted product-content flow reaching the AI assistant.
+
 ## Evidence and Verification
 
 The Week 8 portfolio work includes evidence covering the vulnerable behaviour, remediation, and verification stages. The assessment report records the available screenshots and GitHub remediation evidence rather than treating undocumented results as proof.
