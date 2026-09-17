@@ -2,23 +2,23 @@
 
 ## What the application-layer filter does and why it looks like the right fix
 
-The application-layer filter starts by taking the `tenant_id` from the user's session. It checks that the tenant ID exists and then sends the search to the vector database. After the database returns the results, the application removes any result whose `tenant_id` does not match the user's tenant.
+From the live demo, I understood the application-layer filter as a check that starts with the user's `tenant_id`. The application checks that the tenant ID exists, sends the search to the vector database, and then removes any result whose `tenant_id` does not match the user's tenant.
 
-At first, this looks correct because the user should only see documents belonging to their own company. The filter is checking the tenant before the results are returned to the user, so it is easy to assume the data is already protected.
+At first, this looks correct to me because the user should only see documents belonging to their own company. The application is checking the tenant before the results are returned to the user, so it is easy to think the data is already protected.
 
-The problem is that the database has already returned the data before the filter removes it.
+The problem I noticed is that the database has already returned the data before the application removes it.
 
 ## The specific scenario in which it fails
 
-The problem appears when someone can reach the vector database without going through the application.
+The failure happens when someone can reach the vector database without going through the application.
 
-In the normal flow, it is:
+In the normal flow I observed, it is:
 
 **User → Application → Vector Database**
 
 The application filter runs in that path.
 
-But in the bypass scenario, the attacker goes directly to the database:
+But in the bypass scenario, it becomes:
 
 **Attacker → Vector Database**
 
@@ -28,21 +28,21 @@ This also means the application-layer filter does not solve the fact that unauth
 
 ## How the bypass works
 
-In the live demo, the bypass was simple: instead of sending the search through the application, the attacker called the vector database directly with a search such as an outstanding invoice balance query.
+In the live demo, I saw that the bypass was simple: instead of sending the search through the application, the attacker called the vector database directly with a search such as an outstanding invoice balance query.
 
 Because the database itself had no tenant restriction, the response contained results from different companies. The application never got the chance to remove the unwanted records.
 
-The important point for me is that the filter was not completely useless; it worked only when the request followed the normal application path. The weakness was that the database itself did not enforce the same rule.
+The main thing I took from the demo is that the filter was not completely useless. It worked when the request followed the normal application path. The weakness was that the database itself did not enforce the same rule.
 
 ## What the database-layer fix does differently
 
-The database-layer fix puts the tenant condition inside the database search itself. The search includes the tenant ID and the database is instructed to return only records where the stored tenant ID matches it.
+The database-layer fix puts the tenant condition inside the database search itself. The search includes the tenant ID, so the database returns only records where the stored tenant ID matches it.
 
-So the database does the filtering before the results leave the database.
+The database therefore filters the records before they leave the database.
 
-If an attacker tries the direct database request again, the tenant condition is still part of the query. They cannot simply skip the application and remove the protection because the protection is now attached to the data search itself.
+When I think about the same direct database request after this fix, the attacker cannot simply skip the application and remove the protection. The tenant condition is already part of the database query.
 
-This makes the database the final place enforcing the company boundary, rather than depending only on the application to remember to filter the results.
+For me, this is the main difference: the application-layer control depends on the request passing through the application, while the database-layer control is applied where the records are retrieved.
 
 ## My analogy
 
@@ -50,4 +50,4 @@ I see it like a warehouse with different companies' goods stored inside. An appl
 
 A database-layer filter is different. It is like giving the warehouse worker the customer's company ID before picking anything. The worker brings out only goods belonging to that company in the first place.
 
-That is why the database-layer control is stronger for this case. The restriction is applied where the records are stored and retrieved, not only after the application receives them.
+That is why, from what I saw in the demo, the database-layer control provides a stronger boundary for this case. The restriction is applied where the records are stored and retrieved, not only after the application receives them.
