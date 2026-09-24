@@ -1,23 +1,23 @@
 # Week 11 — Level 4 Data Security in AI
 
-In Week 11, I worked on Level 4 of the AI Defense Lab, focusing on **Data Security in AI**. I assessed the PayGuard RAG system and its fine-tuning pipeline, looked at tenant isolation, vector-store security, embedding inversion, model poisoning, and rate limiting, and then arranged my findings using the STRIDE threat model.
+In Week 11, I worked on Level 4 of the AI Defense Lab, focusing on **Data Security in AI** and the PayGuard RAG system.
+
+I arranged my assessment as a finding-based STRIDE threat model, following the structure I used for my earlier security assessment work.
 
 ## Deliverable
 
-### Data Security Findings Report
-My report contains my Level 4 STRIDE threat model, with my findings, evidence, temporary containment, root cause, and remediation for each category.
+### Level 4 Data Security Findings
+The assessment covers the six STRIDE categories. For each one, I documented **My Finding**, the **Proof / Evidence**, **Temporary Containment**, **Root Cause**, and **Remediation**.
 
-[View my Level 4 Data Security Findings Report](./week-11-level-4-data-security-findings.md)
+[View my Level 4 Data Security Findings](./week-11-level-4-data-security-findings.md)
 
 ## Main Areas I Covered
 
 - RAG and shared vector-store security
 - Cross-tenant retrieval
-- Embedding inversion
-- Fine-tuning data poisoning
-- Airflow pipeline security
+- Fine-tuning data integrity
+- Tenant isolation
 - Rate limiting
-- OWASP LLM05 and LLM09
 - STRIDE threat modelling
+- OWASP LLM05 and LLM09
 - Remediation and verification
-
