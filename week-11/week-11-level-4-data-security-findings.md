@@ -1,4 +1,4 @@
-# Week 11 — Level 4 Data Security Threat Model
+# Data Security Threat Model
 
 ## PayGuard AI — STRIDE Threat Model
 
