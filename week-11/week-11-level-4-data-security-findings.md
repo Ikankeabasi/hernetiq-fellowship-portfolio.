@@ -2,7 +2,7 @@
 
 ## PayGuard AI — STRIDE Threat Model
 
-| STRIDE Category | Your Finding |
+| STRIDE Category | My Finding |
 |---|---|
 | **Spoofing** | I found that the RAG system trusts the client-supplied tenant ID instead of verifying the tenant from the user's authenticated session. |
 | **Tampering** | I found that the fine-tuning pipeline allows training data to reach the model without an integrity check, creating a path for poisoned data to affect the model. |
