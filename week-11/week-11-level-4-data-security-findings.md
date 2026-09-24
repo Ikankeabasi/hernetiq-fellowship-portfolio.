@@ -1,27 +1,56 @@
-# Week 11 — Level 4 Data Security Findings Report
+# Week 11 — Level 4 Data Security Findings
 
-## My Overview
+## 1. Assessment Context
 
-In Level 4, I assessed the data security of the PayGuard AI system. I looked at the RAG retrieval layer, the shared vector store, the fine-tuning pipeline, and the controls around tenant isolation and data integrity.
+In Week 11, I completed Level 4 of the AI Defense Lab, focusing on **Data Security in AI** and the PayGuard RAG system.
 
-I tested the weaknesses shown in the lab, reviewed the real fixture configuration, ran the Semgrep checks, and used the findings to complete a STRIDE threat model.
+I reviewed the RAG configuration and fine-tuning pipeline, checked the Level 4 security controls, and used the STRIDE model to document the findings. I kept the assessment in the same simple finding-based format I used for my earlier model security assessment.
 
-## PayGuard AI — STRIDE Threat Model
+## 2. PayGuard AI — STRIDE Threat Model
 
-| STRIDE Category | My Finding | Proof / Evidence | Temporary Containment | Root Cause | Remediation |
+| STRIDE | My Finding | Proof / Evidence | Temporary Containment | Root Cause | Remediation |
 |---|---|---|---|---|---|
-| **Spoofing** | I found that the RAG system trusts the `tenant_id` supplied by the client instead of verifying it against the user's session. | `TRUST_CLIENT_TENANT_ID = True` and `VERIFY_TENANT_SESSION = False`. The lab allows the tenant value to be changed and demonstrates cross-tenant retrieval. | Stop accepting client-controlled tenant IDs and restrict access to the affected retrieval path until tenant verification is fixed. | The system treats a client-supplied identity value as trusted. | Derive the tenant identity from the authenticated session and enforce it independently of the client request. |
-| **Tampering** | I found that the fine-tuning pipeline accepts training data without validating its integrity before it reaches the model. | `VALIDATE_DATA_INTEGRITY = False` in the Airflow fine-tuning pipeline. The lab also demonstrates a poisoned fine-tuning batch and hidden trigger behaviour. | Pause fine-tuning jobs using unvalidated data and review the affected training source. | Training data is passed from the source to the fine-tuning process without an integrity check. | Enable data-integrity validation and require approved sources before training data is used. |
-| **Repudiation** | I found weak verification around the source and approval of training data, making it difficult to establish that sensitive training data came from an approved source. | `REQUIRE_SOURCE_SIGNOFF = False` in the fine-tuning pipeline. | Pause unapproved training-data changes and manually review the source and approval trail. | The pipeline does not require source sign-off before using the data. | Require source approval/sign-off and keep records of important data and pipeline actions. |
-| **Information Disclosure** | I found that the shared vector store can return documents belonging to other tenants. I also observed the embedding-inversion demonstration showing how information represented by a leaked vector can be reconstructed. | `METADATA_FILTER_ENFORCED = False`. The Level 4 demo shows cross-tenant retrieval and embedding reconstruction. | Restrict access to the vector store and raw embeddings and stop cross-tenant retrieval. | There is no enforced per-tenant boundary in the shared vector store. | Enforce tenant metadata filtering/database-level isolation and restrict raw vector access. |
-| **Denial of Service** | I found that the vector-store query path has no configured rate limit, allowing repeated automated requests. | `RATE_LIMIT_ENABLED = False` and `MAX_QUERIES_PER_MINUTE = None`. Semgrep maps this to CWE-770 and identifies a Denial of Wallet risk. | Temporarily throttle or restrict excessive requests and monitor repeated queries. | The retrieval layer has no query throttling or resource limit. | Enable rate limiting and set an appropriate query limit per user or tenant. |
-| **Elevation of Privilege** | I found that changing the client-controlled `tenant_id` can cross the intended tenant boundary and expose another client's documents. | The Level 4 cross-tenant retrieval demonstration shows that changing the tenant value can retrieve another tenant's documents. Semgrep maps the issue to CWE-639. | Disable the affected access path until tenant isolation is enforced. | Authorisation depends on a user-controlled value instead of a trusted access-control boundary. | Enforce tenant authorisation at the database/vector-store layer rather than relying on the request value. |
-| **OWASP Classification** | My main findings fall under **LLM09:2026 — Vector and Embedding Weaknesses** and **LLM05:2026 — Data and Model Poisoning**. | Semgrep identifies the tenant-ID and metadata-filter findings as LLM09 and the fine-tuning integrity finding as LLM05. | Prioritise the affected retrieval and fine-tuning controls. | The system relies on trust without enforcing the required security boundaries. | Apply the corresponding vector-store isolation and training-data integrity controls. |
-| **Business Impact** | The weaknesses could expose confidential financial information across clients and could allow poisoned training data to introduce unwanted model behaviour. Unrestricted queries could also increase resource and inference costs. | The lab demonstrates cross-tenant document retrieval and a fine-tuning backdoor. The configuration also has rate limiting disabled. | Restrict access, stop affected training jobs, and review potentially exposed information. | Security controls are not enforced strongly enough at the points where the data is accessed and processed. | Enforce isolation, validate training data, and add query limits before treating the system as protected. |
-| **Root Cause** | My main finding is that the system trusts inputs and boundaries that should have been independently verified and enforced. | Client tenant identity is trusted, vector metadata filtering is disabled, and training-data integrity validation is disabled. | Treat the affected inputs as untrusted until they have been verified. | Security is being assumed at the application/pipeline level instead of being enforced at the relevant control points. | Move the controls to the appropriate boundaries: database-level tenant isolation, verified training data, approved sources, and rate limiting. |
-| **Remediation** | I would fix the main issues by enforcing tenant isolation at the database/vector-store layer, validating fine-tuning data, adding rate limiting, and verifying the relevant controls after the changes. | The Level 4 hardened configuration requires `METADATA_FILTER_ENFORCED = True`, `VALIDATE_DATA_INTEGRITY = True`, rate limiting, and database-level tenant enforcement. | Apply the fixes, rerun the Level 4 tests, and confirm that the previous attack demonstrations are blocked. | The vulnerable configuration leaves key controls disabled. | Implement the required controls, change `SECURITY_STATUS` to `PATCHED`, run `python3 tests/test_payguard_rag.py`, and record the resulting evidence. |
+| **Spoofing** | I found that the RAG system trusts the `tenant_id` supplied by the client instead of verifying the tenant from the user's session. | In `rag_config.py`, `TRUST_CLIENT_TENANT_ID = True` and `VERIFY_TENANT_SESSION = False`. The Semgrep rule also flags this as a tenant identity trust problem. | Stop accepting client-controlled tenant IDs and restrict the affected retrieval path until tenant verification is fixed. | The system treats a value supplied by the client as proof of identity. | Derive the tenant ID from the authenticated session and verify it on the server before retrieval. |
+| **Tampering** | I found that training data can reach the fine-tuning process without an integrity check, creating a path for poisoned data to influence the model. | In `finetune_pipeline_dag.py`, `VALIDATE_DATA_INTEGRITY = False`. The pipeline pulls training data directly and passes it to fine-tuning. | Pause fine-tuning jobs using unvalidated data and review the affected training source. | Training data moves from the source to the model without integrity validation. | Validate training-data integrity before training and only allow approved data sources into the pipeline. |
+| **Repudiation** | I found weak accountability for training-data changes because source approval is not enforced before the data is used for training. | In `finetune_pipeline_dag.py`, `REQUIRE_SOURCE_SIGNOFF = False`. The pipeline therefore does not require source sign-off before training. | Pause unapproved training-data changes and manually review the source and approval trail. | The pipeline does not enforce a source approval/sign-off step. | Require source sign-off and keep an auditable record of important training-data and pipeline actions. |
+| **Information Disclosure** | I found that the shared vector store does not enforce tenant isolation, so one tenant's documents can be returned when another tenant queries the system. | In `rag_config.py`, `VECTOR_DB_INDEX = "payguard-shared-index"` and `METADATA_FILTER_ENFORCED = False`. The Level 4 bypass demonstration shows cross-tenant results when the database is queried without the application filter. | Restrict direct vector-store access and stop cross-tenant retrieval while the isolation control is being fixed. | The vector store is shared and has no enforced per-tenant namespace or metadata filter. | Enforce the tenant filter inside the vector-database query so unauthorised documents never leave the database. |
+| **Denial of Service** | I found that the retrieval layer has no query rate limit, allowing repeated automated requests against the shared vector store. | In `rag_config.py`, `RATE_LIMIT_ENABLED = False` and `MAX_QUERIES_PER_MINUTE = None`. Semgrep maps this to CWE-770 and identifies a Denial of Wallet risk. | Temporarily throttle excessive requests and monitor repeated query activity. | The retrieval layer has no query throttling or resource limit. | Enable rate limiting and set a reasonable query limit per user or tenant. |
+| **Elevation of Privilege** | I found that a client-controlled tenant value can be used to cross the intended tenant boundary and access another client's documents. | `TRUST_CLIENT_TENANT_ID = True`, `METADATA_FILTER_ENFORCED = False`, and the Level 4 cross-tenant retrieval demonstration show the access-control weakness. Semgrep maps the tenant-ID issue to CWE-639. | Disable the affected access path until tenant authorisation is enforced. | Authorisation depends on a user-controlled tenant value instead of a trusted server-side access boundary. | Enforce tenant authorisation at the database/vector-store layer and derive the tenant from the authenticated session. |
 
-## My Main Takeaway
+## 3. Framework Classification
 
-The main lesson I took from this Level 4 is that an AI system should not simply **trust the data or identity information passed into it**. The RAG system needs its own access boundary, and the fine-tuning pipeline needs to verify the data before allowing it to influence the model.
+| Finding | Classification |
+|---|---|
+| Client-controlled tenant ID / cross-tenant retrieval | OWASP **LLM09:2026 — Vector and Embedding Weaknesses**; CWE-639 |
+| Missing metadata filter | OWASP **LLM09:2026 — Vector and Embedding Weaknesses**; CWE-284 |
+| Missing fine-tuning data integrity validation | OWASP **LLM05:2026 — Data and Model Poisoning**; CWE-345 |
+| Missing retrieval rate limiting | CWE-770; MITRE ATLAS **AML.T0054 — LLM Data Exfiltration** |
+
+## 4. Main Security Finding
+
+My main finding from the Level 4 assessment is that the PayGuard RAG system relies on controls at the application/configuration level that are not strongly enforced where the data actually lives.
+
+The most important example I observed was tenant isolation. An application-layer check is not enough if the vector database can still be reached directly. The tenant restriction needs to be enforced inside the database query itself.
+
+## 5. Remediation
+
+The fixes I would apply are:
+
+1. Derive the tenant identity from the authenticated session instead of trusting the client request.
+2. Enforce `tenant_id` filtering at the vector-database layer.
+3. Validate training-data integrity before fine-tuning.
+4. Require source approval/sign-off for training data.
+5. Enable retrieval-layer rate limiting.
+6. Rerun the Level 4 tests after the changes and keep the results as evidence.
+
+## 6. Evidence Sources
+
+- Level 4 PayGuard fixture: `fixtures/level4_payguard/rag_config.py`
+- Level 4 fine-tuning fixture: `fixtures/level4_payguard/finetune_pipeline_dag.py`
+- Level 4 Semgrep rules: `.semgrep.yml`
+- Level 4 RAG/filter walkthrough material used for the assessment
+
+## 7. Conclusion
+
+This assessment showed me that securing a RAG system is not only about the application code or the model. The retrieval boundary, tenant isolation, training-data integrity, and resource controls all have to be enforced at the correct layer.
 
