@@ -1,8 +1,8 @@
-# Week 11 — Level 4 Data Security Threat Model
+# Data Security Threat Model
 
 ## PayGuard AI — STRIDE Threat Model
 
-| STRIDE Category | Your Finding |
+| STRIDE Category | My Finding |
 |---|---|
 | **Spoofing** | The RAG layer accepts the `tenant_id` directly from the request and does not verify it against the authenticated session. In `rag_config.py`, `TRUST_CLIENT_TENANT_ID = True` and `VERIFY_TENANT_SESSION = False`. I confirmed the weakness in the lab by using a Meridian session with a different tenant ID and retrieving that tenant's records. The fix is to derive the tenant from the authenticated session and reject any mismatched client-supplied value. |
 | **Tampering** | The fine-tuning pipeline accepts training data without checking its integrity before it reaches the model. In `finetune_pipeline_dag.py`, `VALIDATE_DATA_INTEGRITY = False`, and the DAG passes data from the shared source directly to the fine-tuning step. The lab's poisoned-data demonstration shows how a malicious batch can introduce hidden model behaviour. Training data should be validated and approved before it reaches the fine-tuning stage. |
