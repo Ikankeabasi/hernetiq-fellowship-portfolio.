@@ -73,7 +73,7 @@ This meant that the security boundary between PayGuard clients was not being enf
 
 **Screenshot 1 — PayGuard RAG configuration**
 
-*[Insert screenshot of the RAG configuration here.]*
+<img width="1919" height="935" alt="Screenshot 2026-09-28 160206" src="https://github.com/user-attachments/assets/cc215648-9912-49bd-8b03-1439c83f32b8" />
 
 ---
 
@@ -97,7 +97,8 @@ METADATA_FILTER_ENFORCED = False
 
 **Screenshot 2 — Cross-tenant retrieval**
 
-*[Insert screenshot showing the cross-tenant retrieval result here.]*
+<img width="1916" height="669" alt="Screenshot 2026-09-17 165638" src="https://github.com/user-attachments/assets/e2af7701-8a4e-4559-9c1b-d028f0ad3730" />
+
 
 ---
 
@@ -152,7 +153,14 @@ The risk is therefore not only confidentiality. It can also become a resource an
 
 **Screenshot 3 — Cross-tenant scale demonstration**
 
-*[Insert screenshot of the scale/harvesting demonstration here.]*
+***Before***
+
+<img width="1918" height="843" alt="Screenshot 2026-09-24 141636" src="https://github.com/user-attachments/assets/2badd594-0b95-4f6c-b210-768c4a850498" />
+
+***After***
+
+<img width="1902" height="512" alt="Screenshot 2026-09-28 161621" src="https://github.com/user-attachments/assets/5957438d-1811-4630-9c22-61265b528d13" />
+
 
 ---
 
@@ -172,7 +180,8 @@ My finding was therefore that raw embeddings should not be unnecessarily exposed
 
 **Screenshot 4 — Embedding inversion demonstration**
 
-*[Insert screenshot showing the embedding inversion demonstration here.]*
+<img width="1919" height="662" alt="Screenshot 2026-09-28 162151" src="https://github.com/user-attachments/assets/04e963b0-f681-41b5-92bf-f289cc9727e2" />
+
 
 ---
 
@@ -199,7 +208,7 @@ The lab demonstrated this using a poisoned training batch containing a hidden tr
 
 **Screenshot 5 — Fine-tuning pipeline configuration**
 
-*[Insert screenshot showing the fine-tuning pipeline here.]*
+<img width="728" height="423" alt="Screenshot 2026-09-28 163416" src="https://github.com/user-attachments/assets/31ef8dc3-9a01-4d7d-ac0c-3f1d71afef87" />
 
 ---
 
@@ -221,7 +230,7 @@ The appropriate control is therefore to validate and approve training data befor
 
 **Screenshot 6 — Backdoor trigger demonstration**
 
-*[Insert screenshot showing the poisoned-model behaviour here.]*
+<img width="1879" height="603" alt="Screenshot 2026-09-28 162819" src="https://github.com/user-attachments/assets/31171155-12b8-458b-a3e6-c2b65fd010d2" />
 
 ---
 
@@ -244,7 +253,8 @@ This was useful because it showed that the problems I identified manually could 
 
 **Screenshot 7 — Semgrep results**
 
-*[Insert screenshot of the Semgrep output here.]*
+<img width="1918" height="948" alt="Screenshot 2026-09-24 144344" src="https://github.com/user-attachments/assets/d5a1892f-a487-45d7-81b6-9ccf4d1ec35a" />
+
 
 ---
 
@@ -267,7 +277,11 @@ I used STRIDE to organise the security findings from the assessment.
 
 **Screenshot 8 — Completed STRIDE threat model**
 
-*[Insert screenshot of the completed STRIDE table here.]*
+<img width="1918" height="1079" alt="Screenshot 2026-09-28 164350" src="https://github.com/user-attachments/assets/b344b1b6-fcbe-4cc6-899a-fb6cf48e417e" />
+
+**Or here is the link to the STRIDE threat model**
+https://github.com/Ikankeabasi/hernetiq-fellowship-portfolio./blob/main/week-11/week-11-level-4-data-security-findings.md
+
 
 ---
 
@@ -288,7 +302,7 @@ The main changes were:
 The remediation was committed to my AI Security Defense Lab repository.
 
 **Level 4 remediation commit:**  
-https://github.com/Ikankeabasi/ai-security-defense-lab/commit/4c2dfc5a606a6d81c7f43d8f0c21fe01f2705f60
+https://github.com/Ikankeabasi/ai-security-defense-lab/commit/f141340cb548ab9d1d21ce2b536094d84fa5366a#diff-fa3beccf2c965f6ea15d8b8108d660194ee4f1dc5654827d7768082c582ca41f
 
 ---
 
@@ -309,7 +323,8 @@ The tests cover:
 
 **Screenshot 9 — Final test verification**
 
-*[Insert the terminal screenshot showing the final test result here.]*
+<img width="959" height="455" alt="Screenshot 2026-09-24 172413" src="https://github.com/user-attachments/assets/e8c37f79-494e-4986-a068-d071d61a35d9" />
+
 
 I am leaving this screenshot as the direct evidence for the final verification rather than claiming a test result that is not shown in this report.
 
@@ -378,38 +393,6 @@ The final remediation is recorded in the Level 4 GitHub commit:
 https://github.com/Ikankeabasi/ai-security-defense-lab/commit/4c2dfc5a606a6d81c7f43d8f0c21fe01f2705f60
 
 The main lesson I am taking from this level is that **AI security has to protect the data and infrastructure around the model, not just the model itself.**
-
----
-
-## 18. Evidence
-
-### Evidence 1 — RAG Configuration
-*[Insert screenshot]*
-
-### Evidence 2 — Cross-Tenant Retrieval
-*[Insert screenshot]*
-
-### Evidence 3 — Cross-Tenant Scale Demonstration
-*[Insert screenshot]*
-
-### Evidence 4 — Embedding Inversion
-*[Insert screenshot]*
-
-### Evidence 5 — Fine-Tuning Pipeline
-*[Insert screenshot]*
-
-### Evidence 6 — Fine-Tuning Backdoor
-*[Insert screenshot]*
-
-### Evidence 7 — Semgrep Results
-*[Insert screenshot]*
-
-### Evidence 8 — Completed STRIDE Threat Model
-*[Insert screenshot]*
-
-### Evidence 9 — Final Test Verification
-*[Insert screenshot]*
-
 ---
 
 **Related Level 4 Findings:**  
