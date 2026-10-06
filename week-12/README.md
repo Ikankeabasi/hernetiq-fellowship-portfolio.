@@ -19,10 +19,11 @@ In Week 12, I covered **Autonomous Agent Governance** across **Session 23 and Se
 - Schema enforcement, Llama Guard and NeMo Guardrails
 - MAESTRO seven-layer agent threat modelling
 - NIST AI Risk Management Framework (Govern, Map, Measure, Manage)
-- Autonomous Agent Risk Matrix
 
-## Assignment
+## Project
 
-I will upload my completed **Autonomous Agent Risk Matrix** separately.
+**Autonomous Agent Risk Matrix**
 
-The matrix applies the Week 12 concepts to an AI customer-support agent and maps each risk to its impact, control, MAESTRO layer and relevant NIST AI RMF function.
+This project applies the Week 12 concepts to an AI customer-support agent. It identifies security risks across the agent's goals, tools, permissions, data, infrastructure, monitoring and external integrations, then maps each risk to its impact, control, MAESTRO layer and relevant NIST AI RMF function.
+
+The completed Risk Matrix is uploaded separately in this Week 12 folder.
