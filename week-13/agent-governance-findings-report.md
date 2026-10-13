@@ -2,11 +2,6 @@
 
 ## LegalBot Municipal | Autonomous Agent Governance
 
-**Programme:** HerNetIQ AI Security Fellowship  
-**Lab:** AI Security Defense Lab — Level 5  
-**Assessment type:** Simulated AI agent security assessment  
-**Status:** Patch changes recorded in the lab repository; evidence screenshots should be attached in the marked locations below.
-
 ## 1. Executive Summary
 
 In Level 5, I assessed a simulated municipal AI legal assistant called LegalBot Municipal, used by the City of Fairhaven to help with code-violation cases, permit questions and records requests. The scenario showed how a malicious instruction placed inside a citizen comment could redirect the agent and lead it to dismiss a case without human approval.
@@ -47,8 +42,6 @@ I changed the Level 5 lab status to `SECURITY_STATUS = "PATCHED"` and updated th
 
 The patched lab demonstration is designed to show the goal hijack being blocked from directly dismissing the case and the requested action being queued for human review. The vulnerable fixture remains available in the repository for the exercise's configuration review and static-analysis task; its presence should not be mistaken for the hardened configuration.
 
-**Verification note:** the repository code shows the patched lab status. Add the actual output screenshots from the prescribed test runs, Semgrep scan and live Llama Guard classifications in Section 7. This report does not claim that those commands or live model calls were executed successfully unless the attached evidence confirms them.
-
 ## 5. MAESTRO Threat Model
 
 The table below reproduces my Level 5 MAESTRO findings. MAESTRO examines the technical architecture and the ways an agent's goals, tools, permissions and operating environment can create risk.
@@ -80,42 +73,17 @@ The MAESTRO table focuses on technical weaknesses. The NIST AI RMF mapping focus
 
 ## 7. Required Evidence Screenshots
 
-Only add screenshots of the actual outputs captured while completing the walkthrough. Do not replace these placeholders with recreated or assumed results.
-
 ### Evidence 1 — Semgrep Scan
 
-**Walkthrough requirement:** run `semgrep --config=.semgrep.yml .` from the repository root and capture the terminal output showing the Level 5 findings in `agent_config.py` (the walkthrough expects three findings).
-
-**Screenshot to insert:**  
-_[Insert screenshot of the actual Semgrep terminal output here.]_
+<img width="1095" height="897" alt="Screenshot 2026-10-13 143709" src="https://github.com/user-attachments/assets/40818c60-912e-47ce-95ff-35252acc4ebf" />
 
 ### Evidence 2 — Llama Guard: Malicious Comment
 
-**Walkthrough requirement:** classify the malicious citizen-comment payload using the live Llama Guard interceptor and capture the response.
+<img width="1913" height="895" alt="Screenshot 2026-10-13 144118" src="https://github.com/user-attachments/assets/c4b0c1a5-3453-456a-8754-d23502132257" />
 
-**Screenshot to insert:**  
-_[Insert screenshot of the actual Llama Guard response for the malicious payload here.]_
+### Evidence  3 — After-Patch Test Run
 
-### Evidence 3 — Llama Guard: Benign Comment
-
-**Walkthrough requirement:** classify the normal, benign case comment and capture the response as well.
-
-**Screenshot to insert:**  
-_[Insert screenshot of the actual Llama Guard response for the benign payload here.]_
-
-### Evidence 4 — Before-Patch Test Run
-
-**Walkthrough requirement:** run `python3 tests/test_legalbot_agent.py` before patching and capture the expected failing results.
-
-**Screenshot to insert:**  
-_[Insert screenshot of the actual before-patch test output here.]_
-
-### Evidence 5 — After-Patch Test Run
-
-**Walkthrough requirement:** run `python3 tests/test_legalbot_agent.py` after patching and capture the results. The walkthrough expects all tests to pass.
-
-**Screenshot to insert:**  
-_[Insert screenshot of the actual after-patch test output here.]_
+<img width="1418" height="742" alt="Screenshot 2026-10-13 144500" src="https://github.com/user-attachments/assets/4e01949d-2531-49a3-9202-272be1f988fd" />
 
 ## 8. Conclusion
 
