@@ -20,6 +20,19 @@
 | **Root Cause** | The primary root cause is excessive standing authority combined with the absence of a mandatory human-approval gate. Sanitizing citizen input helps reduce goal-hijack risk, and audit logging supports investigation, but neither replaces the authorization boundary. Removing the agent's standing dismissal authority is the key containment control: even if its goal is hijacked, it should not be able to finalize a dismissal on its own. |
 | **Remediation** | Set `CAN_FINALIZE_DISMISSAL = False`, set `REQUIRE_HUMAN_APPROVAL = True`, set `SANITIZE_CITIZEN_INPUT = True`, and set `LOG_AGENT_ACTIONS = True`. Route requested case dispositions to human review and enforce authorization in the action path. Run the prescribed before-and-after test script and Semgrep scan, and retain screenshots of the actual results as evidence. |
 
+
+---
+
+# Task 9 — Mapping to the OWASP Agentic Top 10
+
+The LegalBot findings map to the following OWASP Agentic Top 10 categories:
+
+- **OWASP Agentic Top 10 — ASI01: Agent Goal Hijack.** A malicious instruction is embedded in a citizen comment and attempts to redirect LegalBot from its intended role. The agent may treat this untrusted case content as an authoritative instruction.
+- **OWASP Agentic Top 10 — ASI02: Tool Misuse & Exploitation.** After the agent's goal is hijacked, its available case-finalization capability can be used to carry out an unsafe or unauthorized dismissal. The missing human-approval gate allows the attempted misuse to reach a sensitive action.
+- **OWASP Agentic Top 10 — ASI03: Identity & Privilege Abuse.** LegalBot has standing dismissal authority that is broader than needed for its ordinary support role. This excessive standing permission means a hijacked goal can become an actual administrative action. Applying **Least Agency** means removing that unnecessary authority, not merely relying on a warning or an extra check.
+
+These classifications describe the simulated LegalBot scenario. They do not claim that a real municipal case was dismissed.
+
 ## Related Governance Evidence
 
 The NIST AI RMF mapping is a separate deliverable that addresses organizational governance through Govern, Map, Measure, and Manage.
