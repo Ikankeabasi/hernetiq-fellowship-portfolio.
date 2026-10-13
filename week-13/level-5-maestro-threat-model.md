@@ -6,7 +6,7 @@
 
 ## MAESTRO Threat Model
 
-| MAESTRO Layer | Your Finding |
+| MAESTRO Layer | MY Finding |
 |---|---|
 | **L1 — Foundation Models** | The agent may interpret an instruction embedded in a citizen comment as an authoritative directive instead of treating it as untrusted case content. This creates the goal-hijack risk described in the scenario. |
 | **L2 — Data Operations** | Not applicable to this incident based on the available investigation. The scenario does not identify a separate data-pipeline issue. |
@@ -23,22 +23,10 @@
 
 ---
 
-# Task 9 — Mapping to the OWASP Agentic Top 10
+# Mapping to the OWASP Agentic Top 10
 
 The LegalBot findings map to the following OWASP Agentic Top 10 categories:
 
 - **OWASP Agentic Top 10 — ASI01: Agent Goal Hijack.** A malicious instruction is embedded in a citizen comment and attempts to redirect LegalBot from its intended role. The agent may treat this untrusted case content as an authoritative instruction.
 - **OWASP Agentic Top 10 — ASI02: Tool Misuse & Exploitation.** After the agent's goal is hijacked, its available case-finalization capability can be used to carry out an unsafe or unauthorized dismissal. The missing human-approval gate allows the attempted misuse to reach a sensitive action.
 - **OWASP Agentic Top 10 — ASI03: Identity & Privilege Abuse.** LegalBot has standing dismissal authority that is broader than needed for its ordinary support role. This excessive standing permission means a hijacked goal can become an actual administrative action. Applying **Least Agency** means removing that unnecessary authority, not merely relying on a warning or an extra check.
-
-These classifications describe the simulated LegalBot scenario. They do not claim that a real municipal case was dismissed.
-
-## Related Governance Evidence
-
-The NIST AI RMF mapping is a separate deliverable that addresses organizational governance through Govern, Map, Measure, and Manage.
-
-[Open the NIST AI RMF mapping](./nist-ai-rmf-mapping.md)
-
-## Evidence Status
-
-This document records the Level 5 scenario and the findings supported by the walkthrough and supplied lab configuration. Attach actual screenshots or terminal output separately after completing the corresponding tasks. Do not describe tests or scans as successful unless the recorded output confirms the result.
