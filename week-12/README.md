@@ -1,6 +1,6 @@
 # Week 12 — Autonomous Agent Governance
 
-In Week 12 of Domain 5, I am learning how to identify risks in autonomous AI agents, limit unsafe actions, apply guardrails, and map risks to security and governance frameworks.
+In Week 12 of Domain 5, I learned how to identify risks in autonomous AI agents, limit unsafe actions, apply guardrails, and map risks to security and governance frameworks.
 
 ## Session 23 — Agency & Execution Controls
 - Agency, excessive permissions and blast radius
@@ -19,7 +19,5 @@ In Week 12 of Domain 5, I am learning how to identify risks in autonomous AI age
 **Evidence:**
 - [Autonomous Agent Risk Matrix (PDF)](./Autonomous_Agent_Risk_Matrix.pdf) — risks, impacts, controls and framework mappings.
 - [Agent Security Quick Assessment](./Agent_Security_Quick_Assessment.md) — answers to the nine Career Passport assessment questions.
-
-**Key lesson:** Securing an agent means looking beyond its answers to the tools, data, permissions and actions it can access—and making sure those are controlled and monitored.
 
 **LinkedIn:** No LinkedIn profile or post link was available in the portfolio README I checked, so I have not added an unverified link.
