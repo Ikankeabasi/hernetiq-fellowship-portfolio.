@@ -1,35 +1,25 @@
 # Week 12 — Autonomous Agent Governance
 
-In Week 12, I covered **Autonomous Agent Governance** across **Session 23 and Session 24**, focusing on how AI systems become a different security problem when they can make decisions, call tools and take actions.
+In Week 12 of Domain 5, I am learning how to identify risks in autonomous AI agents, limit unsafe actions, apply guardrails, and map risks to security and governance frameworks.
 
-## What I Covered
-
-### Session 23 — Introduction to Agency, Excessive Agency & AI Execution Controls
-- Autonomous agents and agency
-- Excessive agency and blast radius
-- Tool/function calling and tool-calling loops
-- Read vs. write access
+## Session 23 — Agency & Execution Controls
+- Agency, excessive permissions and blast radius
+- Tool/function calling and read vs. write access
 - Arbitrary code execution risks
-- Input validation, output validation and execution size limits
-- Governance and execution controls
+- Input/output validation and execution limits
 
-### Session 24 — Agentic AI Security, Guardrails & Governance
-- OWASP Top 10 for Agentic Applications (ASI01–ASI10)
-- Agent Goal Hijack, Tool Misuse & Exploitation, and Identity & Privilege Abuse
+**Evidence:** [Autonomous Agent Security Scenario Analysis](./Autonomous_Agent_Security_Scenario_Analysis.md) — analysis of both scenarios, their risks, trust boundaries and recommended controls.
+
+## Session 24 — Agentic AI Security & Governance
+- OWASP Top 10 for Agentic Applications, including ASI01–ASI03
 - Schema enforcement, Llama Guard and NeMo Guardrails
-- MAESTRO seven-layer agent threat modelling
-- NIST AI Risk Management Framework (Govern, Map, Measure, Manage)
+- MAESTRO’s seven layers
+- NIST AI RMF: Govern, Map, Measure and Manage
 
-## Session 23 Deliverable
+**Evidence:**
+- [Autonomous Agent Risk Matrix (PDF)](./Autonomous_Agent_Risk_Matrix.pdf) — risks, impacts, controls and framework mappings.
+- [Agent Security Quick Assessment](./Agent_Security_Quick_Assessment.md) — answers to the nine Career Passport assessment questions.
 
-**[Autonomous Agent Security Scenario Analysis](Autonomous_Agent_Security_Scenario_Analysis.md)**
+**Key lesson:** Securing an agent means looking beyond its answers to the tools, data, permissions and actions it can access—and making sure those are controlled and monitored.
 
-This written analysis examines both Session 23 scenarios: an AI customer-support agent with excessive permissions and an AI system that passes generated commands to an unrestricted execution function. It identifies the risks, permission and trust boundaries, and recommended controls. The session was conceptual and scenario-based; this document does not claim that a practical lab or runtime tests were completed.
-
-## Session 24 Project
-
-**Autonomous Agent Risk Matrix**
-
-This project applies the Week 12 concepts to an AI customer-support agent. It identifies security risks across the agent's goals, tools, permissions, data, infrastructure, monitoring and external integrations, then maps each risk to its impact, control, MAESTRO layer and relevant NIST AI RMF function.
-
-The completed Risk Matrix is uploaded separately in this Week 12 folder.
+**LinkedIn:** No LinkedIn profile or post link was available in the portfolio README I checked, so I have not added an unverified link.
