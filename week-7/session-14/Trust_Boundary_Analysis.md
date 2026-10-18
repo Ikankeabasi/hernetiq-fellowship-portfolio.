@@ -1,6 +1,5 @@
 # Week 7 · Session 14 — Trust Boundary Analysis
 
-**HerNetIQ AI Security Fellowship · Cohort 1 · 2026**  
 **Topic:** Indirect Prompt Injection & Cross-Tenant Leakage
 
 ## Purpose
@@ -51,18 +50,10 @@ The notes describe a support assistant that retrieves company documents before g
 
 For example, if a retrieved document tells the assistant to ignore its task and reveal another customer's records, the document must remain untrusted data. The application must also prevent Customer A from retrieving Customer B's records, regardless of what the model says.
 
-## 4. Main finding
-
-The DataForge ML Level 2 lab focuses on model supply-chain security. Its scenario does **not** by itself demonstrate a cross-tenant RAG leak, so I cannot claim that such a leak was observed there. The Session 14 support-assistant scenario illustrates the separate risks of indirect prompt injection and tenant-isolation failure.
-
-The common lesson is that a model is not the security boundary. Trust, permissions and data access must be enforced by the surrounding application and pipeline.
-
-## 5. Recommended controls
+## 4. Recommended controls
 
 1. Treat downloaded models and retrieved documents as untrusted until checked.
 2. Keep trusted instructions separate from external content.
 3. Enforce authorization and tenant filters outside the model, before retrieval.
 4. Apply least privilege and data minimisation.
 5. Validate outputs, monitor activity and retain logs for investigation.
-
-**Evidence basis:** HerNetIQ Week 7 Session 14 Fellow Notes and Evidence Brief; my AI Security Defense Lab repository's DataForge ML Level 2 scenario and remediation documentation.
