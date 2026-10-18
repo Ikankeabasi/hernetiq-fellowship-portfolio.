@@ -1,13 +1,10 @@
 # Autonomous Agent Security Scenario Analysis
 
-**HerNetIQ AI Security Fellowship — Domain 5, Week 12, Session 23**  
-**Topic:** Agency, Excessive Agency and AI Execution Controls
-
 ## Purpose
 
 This analysis examines the two scenarios discussed in Session 23: an AI customer-support agent with excessive permissions and an AI system that can pass generated commands to an unrestricted execution function. The aim is to identify the security risks, the permissions and trust boundaries involved, and controls that would reduce the risk.
 
-The session was conceptual and scenario-based. The recommendations below describe defensive controls for the scenarios; they are not claims that a practical lab or code patch was completed during Session 23.
+The session was conceptual and scenario-based. The recommendations below describe defensive controls for the scenarios.
 
 ## Scenario 1: Customer-Support Agent with Excessive Permissions
 
@@ -79,5 +76,3 @@ The main lessons from Session 23 are:
 ## Conclusion
 
 The customer-support scenario demonstrates how unnecessary permissions can turn a routine support agent into a risk to customer accounts. The command-execution scenario demonstrates how unrestricted functions can turn AI-generated text into system actions. In both cases, least privilege, strong validation, restricted tools, execution limits, logging and appropriate human approval help reduce the potential blast radius.
-
-**Scope note:** This is a written analysis of the scenarios in the Session 23 study notes. The session evidence brief identifies this session as conceptual and scenario-based and states that no practical lab was included. Therefore, this document does not claim that code was patched or runtime tests were performed for these two scenarios.
