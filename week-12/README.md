@@ -20,7 +20,13 @@ In Week 12, I covered **Autonomous Agent Governance** across **Session 23 and Se
 - MAESTRO seven-layer agent threat modelling
 - NIST AI Risk Management Framework (Govern, Map, Measure, Manage)
 
-## Project
+## Session 23 Deliverable
+
+**[Autonomous Agent Security Scenario Analysis](Autonomous_Agent_Security_Scenario_Analysis.md)**
+
+This written analysis examines both Session 23 scenarios: an AI customer-support agent with excessive permissions and an AI system that passes generated commands to an unrestricted execution function. It identifies the risks, permission and trust boundaries, and recommended controls. The session was conceptual and scenario-based; this document does not claim that a practical lab or runtime tests were completed.
+
+## Session 24 Project
 
 **Autonomous Agent Risk Matrix**
 
