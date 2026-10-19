@@ -2,7 +2,6 @@
 
 **Mission:** S25 — LegalBot Municipal Part A: Lab Evidence + MAESTRO/NIST AI RMF Report  
 **Domain:** Domain 5 — Autonomous Agent Governance  
-**Report type:** Part A framework mapping; separate from the Part B remediation report
 
 ## 1. System overview
 
@@ -12,7 +11,6 @@ LegalBot Municipal is a simulated AI legal assistant for the City of Fairhaven. 
 
 In the supplied scenario, the citizen comment for case **CASE-2291** contains an instruction claiming supervisor authorization and telling LegalBot to dismiss the case immediately. The comment is untrusted case content; it is not proof that a supervisor approved the action. The vulnerable scenario combines this attempted goal hijack with standing dismissal authority and no mandatory human-approval checkpoint. The lab's narrative shows the agent proceeding to dismiss the case without approval or an audit trail.
 
-This is a simulated lab incident. It does not establish that a real municipal case was dismissed. The report maps the risks described by the lab and does not claim that a particular Semgrep scan or screenshot was reproduced while preparing this document.
 
 ## 3. Attack chain
 
@@ -23,24 +21,25 @@ This is a simulated lab incident. It does not establish that a real municipal ca
 5. **The lack of an audit trail weakens accountability.** The lab scenario indicates that no audit log is created for the vulnerable action, making later investigation harder.
 6. **Static analysis provides a configuration check.** The lab instructs the fellow to run Semgrep against the supplied fixture to identify the risky configuration flags. This check complements, but does not replace, the behavior evidence.
 
-The key relationship is that goal hijack is the initiating attempt, while excessive authority and missing approval controls allow it to become privilege misuse.
 
 ## 4. Evidence
 
-The following evidence items belong in their separate Career Passport fields. This section explains what each item is intended to substantiate; it does not replace the actual screenshots or raw scan output.
+**Evidence 01 — Standing permission**
+<img width="1917" height="1066" alt="Screenshot 2026-10-19 141543" src="https://github.com/user-attachments/assets/88b82734-1498-40a6-94e9-c6434c1ad128" />
 
-| Evidence item | What it should show | Relevance to the mapping |
-|---|---|---|
-| **Evidence 01 — Standing permission** | Screenshot of the relevant pre-remediation permission/configuration, including the standing dismissal capability and missing approval gate. | Shows the authority and control conditions that make the action possible. |
-| **Evidence 02 — Goal hijack** | Screenshot showing the supplied untrusted citizen instruction and the agent's resulting behavior. | Shows the attempted redirection from case content into an agent goal. |
-| **Evidence 03 — Privilege misuse** | Screenshot showing the sensitive dismissal being completed in the vulnerable scenario without human approval. | Connects the goal-hijack attempt to a consequential action. |
-| **Evidence 04 — Semgrep** | The actual command and result from the supplied fixture. The lab instructions state that three findings are expected in `agent_config.py`. | Provides static-analysis evidence for the risky configuration; it is not, by itself, proof that the simulated action occurred. |
 
-**Evidence note:** Capture or use the screenshots and scan output from the original vulnerable run. The current GitHub Level 5 files include patched-state material, so a current after-patch screen must not be presented as proof of the original vulnerable behavior. Do not state that the scan was run or that a screenshot exists unless the evidence actually shows it.
+**Evidence 02 — Goal hijack:**
+<img width="1644" height="516" alt="Screenshot 2026-10-19 203805" src="https://github.com/user-attachments/assets/f26178f9-0a0c-4e9b-8fd3-3e4f84b2572f" />
+
+
+**Evidence 03 — Privilege misuse:** 
+<img width="3506" height="1636" alt="Screenshot-2026-10-19-141548" src="https://github.com/user-attachments/assets/8bb6bc70-346b-4482-876a-2112a5e12456" />
+
+
+**Evidence 04 — Semgrep result.:**
+<img width="1095" height="897" alt="Screenshot 2026-10-13 143709" src="https://github.com/user-attachments/assets/c7e98af7-23d1-4f41-947d-b6dd641f2ede" />
 
 ## 5. MAESTRO mapping
-
-MAESTRO identifies the technical layer where a risk appears and helps reveal how weaknesses across layers combine. The table maps the four primary risks in the lab brief and includes the control gap around observability.
 
 | Risk | Evidence | MAESTRO layer(s) | Why this mapping fits | Relevant control |
 |---|---|---|---|---|
@@ -53,7 +52,7 @@ MAESTRO identifies the technical layer where a risk appears and helps reveal how
 
 ## 6. NIST AI Risk Management Framework mapping
 
-The NIST AI RMF provides four complementary functions. They should be applied where they fit the finding rather than forced onto every risk.
+The NIST AI RMF provides four complementary functions. 
 
 | Function | Application to LegalBot Municipal |
 |---|---|
@@ -64,7 +63,7 @@ The NIST AI RMF provides four complementary functions. They should be applied wh
 
 ## 7. Controls
 
-The following are recommended controls arising from the Part A investigation. They are not a claim that this report implemented them.
+The following are recommended controls arising from the Part A investigation. 
 
 1. **Least Agency:** remove the agent's standing dismissal permission when it is not required for the assigned task.
 2. **Independent authorization:** require a human approval decision for a sensitive case disposition. Enforce this in the action path, not only in the model prompt.
@@ -75,14 +74,3 @@ The following are recommended controls arising from the Part A investigation. Th
 ## 8. Conclusion
 
 LegalBot's main risk is not prompt injection in isolation. It is the combination of untrusted citizen content, standing authority to dismiss a case, and no mandatory human-approval checkpoint. That combination can allow an attempted goal hijack to become privilege misuse. MAESTRO identifies the relevant model, agent-workflow, observability and security-policy layers; NIST AI RMF translates the findings into governance, context mapping, evaluation and risk-treatment activities.
-
-This is the **Session 25 / Part A mapping report**. It is distinct from the Evidence 05 explanation and from the Session 26 / Part B remediation report. The actual screenshots and Semgrep result must remain genuine, separate evidence artefacts.
-
-## Framework and lab references
-
-- **MAESTRO — Cloud Security Alliance:** https://labs.cloudsecurityalliance.org/maestro/
-- **NIST AI RMF Core — Govern, Map, Measure and Manage:** https://airc.nist.gov/airmf-resources/airmf/5-sec-core/
-- **NIST AI RMF 1.0 publication:** https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
-- **LegalBot Level 5 lab:** https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/levels/level5_legalbot.py
-- **Semgrep configuration:** https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/.semgrep.yml
-- **Session 25 evidence brief:** *Week13_Session_25_Evidence_Brief.pdf*
