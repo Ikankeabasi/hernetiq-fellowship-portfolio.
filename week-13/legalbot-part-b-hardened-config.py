@@ -1,9 +1,3 @@
-"""Reference hardened configuration for LegalBot Municipal — Session 26 / Part B.
-
-This file documents the intended control logic for the portfolio. It is a
-standalone example, not proof that the hosted lab's runtime has been tested.
-Sensitive case dispositions must be executed only by an authorized human
-approval workflow outside this agent.
 """
 from datetime import datetime, timezone
 from typing import Any
