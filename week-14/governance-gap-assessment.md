@@ -52,7 +52,7 @@ I used the OWASP LLM categories covered in my fellowship notes where they fit th
 
 **Recommended remediation:** The engineering owner should derive tenant identity from the authenticated session and enforce tenant isolation at the database/vector-store layer, not from a client-controlled request field. Enable and verify the required tenant filter, then test that cross-tenant requests are denied. Retain the test results and access-control evidence for review.
 
-**Code evidence:** `fixtures/level4_payguard/rag_config.py:7–15`.
+**Code evidence:** [\`rag_config.py\` lines 7–15](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/rag_config.py#L7-L15).
 
 ### Finding 2 — Fine-tuning validation is declared but not connected to the pipeline steps
 
@@ -69,7 +69,7 @@ I used the OWASP LLM categories covered in my fellowship notes where they fit th
 
 **Recommended remediation:** The ML engineering owner should implement the data pull and connect it to checksum validation against an approved manifest, enforce source approval before training, and quarantine files that fail validation. Add tests proving that an unapproved or modified file cannot reach the fine-tuning step. Keep the approval record and test output as audit evidence.
 
-**Code evidence:** `fixtures/level4_payguard/finetune_pipeline_dag.py:8–25` and `27–44`.
+**Code evidence:** [\`finetune_pipeline_dag.py\` lines 8–25](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/finetune_pipeline_dag.py#L8-L25) and [lines 27–44](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/finetune_pipeline_dag.py#L27-L44).
 
 ### Finding 3 — External embedding model source has no stated verification
 
@@ -86,7 +86,7 @@ I used the OWASP LLM categories covered in my fellowship notes where they fit th
 
 **Recommended remediation:** The ML/platform owner should verify the publisher and model provenance, review available model documentation, record the approval decision, and pin the approved model version and integrity information before deployment. If the source cannot be verified, replace it with an approved source.
 
-**Code evidence:** `fixtures/level4_payguard/rag_config.py:22–24`.
+**Code evidence:** [\`rag_config.py\` lines 22–24](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/rag_config.py#L22-L24).
 
 ## 5. Regulatory Exposure Summary
 
