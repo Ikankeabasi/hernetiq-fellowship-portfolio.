@@ -18,7 +18,6 @@ The portfolio is organized week by week so that each stage of the fellowship can
 | Week 6 | AI Model & ML Supply-Chain Security | DataForge ML Threat Assessment · IOC Analysis · MITRE ATLAS Mapping · Model Loader Remediation |
 | Week 7 | Application & API Security | API Security Analysis · BOLA Assessment · Indirect Prompt Injection & Cross-Tenant Leakage Analysis |
 | Week 8 | AI Application & API Security — CartBot AI | Threat Model · API Security Threat Model · AI Application Security Assessment Report · Remediation & Verification Evidence |
-| Week 14 | AI Governance — Governance Gap Assessment | Governance Gap Assessment · Regulatory Exposure Table · Evidence Limitations and Verification Record |
 
 ## Week 1 — 4-Layer AI Architecture
 
@@ -155,29 +154,6 @@ The remediation work introduced JWT validation, server-side identity verificatio
 - [`week-8/README.md`](./week-8/README.md) — Week 8 overview and guide to the week's portfolio documents
 - [`week-8/api-security-threat-model.md`](./week-8/api-security-threat-model.md) — API security threat model and OWASP/MITRE ATLAS classification
 - [`week-8/week-8-ai-application-security-report.md`](./week-8/week-8-ai-application-security-report.md) — detailed CartBot AI security assessment and remediation report
-
-
-## Week 14 — Day One: AI Governance Gap Assessment
-
-Week 14 begins the Domain 6 governance evidence task. I am comparing the security controls expected by the governance process with what the available PayGuard configuration and fine-tuning pipeline actually enforce. The assessment uses the NIST AI Risk Management Framework as its diagnostic structure and maps relevant findings to OWASP LLM categories and ISO/IEC 42001 control areas.
-
-**Key focus:**
-
-- Policy claims versus real implementation
-- Evidence citations using exact code file and line references
-- NIST AI Risk Management Framework: GOVERN, MAP, MEASURE, MANAGE
-- OWASP LLM Top 10 mapping where applicable
-- Severity ratings with a clear rationale
-- Regulatory exposure and specific framework control areas
-- Remediation with an owner, timeframe, and measurable outcome
-- Honest evidence reporting without inventing policy clauses, log entries, or test results
-
-### Week 14 Portfolio Documents
-
-- [Week 14 README](./week-14/README.md) — scope, day-one plan, deliverables, and evidence status
-- [Governance Gap Assessment](./week-14/governance-gap-assessment.md) — working findings and regulatory exposure table
-
-**Evidence limitation:** The connected lab code is available, but the actual client governance policy and audit log were not available in the materials I could access. The assessment marks these as outstanding instead of inventing clause/page references. The report must be updated with the actual policy and log evidence before final submission.
 
 ## Skills Being Built
 
