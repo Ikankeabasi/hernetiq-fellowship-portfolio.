@@ -1,138 +1,170 @@
-# Governance Gap Assessment — PayGuard AI
+# Governance Gap Assessment — NovaPay AI
 
 **Prepared by:** Ikanke Okon Asuquo  
 **Fellowship:** HerNetIQ AI Security Fellowship, Cohort 1  
 **Domain:** 6 — AI Governance (Governance Gap Assessment)  
-**Status:** Working draft — policy artefact and audit log outstanding
+**Assessment date:** 26 October 2026  
+**Assessment status:** Part A — completed source-level review  
+**Overall risk rating:** **HIGH**
 
 ## 1. Executive Summary
 
-I reviewed the available PayGuard AI configuration and fine-tuning pipeline code to check whether important AI security controls are enforced in practice. The code shows material gaps around tenant isolation, fine-tuning data validation, and verification of the external embedding model source. These gaps could expose confidential client information or allow untrusted data and components to affect the AI system. The actual governance policy and audit log were not available in the materials I could access, so the policy clause citations and audit-log conclusions still need to be confirmed before final submission.
+The review identifies material weaknesses in the controls protecting enterprise-client data, governing training-data inputs, approving model deployments, and detecting unfair or degraded model behaviour. The most direct gaps are visible in the reviewed API and fine-tuning code: the API does not compare the requested tenant with the authenticated client, and the pipeline accepts external training sources without performing the stated integrity checks before automatically deploying retrained models. The model card also records that fairness evaluation for the v2.3.x credit model is incomplete, while the repository contains open credit-approval and fraud-regression incidents. **My verdict is that NovaPay's AI governance programme is not fit for purpose in its currently evidenced state**; I recommend prioritising tenant authorisation, fail-closed data validation, and a controlled deployment gate before the next model promotion.
 
 ## 2. Assessment Scope
 
-**Reviewed artefacts**
+I reviewed the following artefacts in the provided NovaPay GitHub repository. I used the source code and records as evidence; I did not modify NovaPay's source code or conduct live production testing.
 
-- `ai-security-defense-lab/fixtures/level4_payguard/rag_config.py`
-- `ai-security-defense-lab/fixtures/level4_payguard/finetune_pipeline_dag.py`
-- The PayGuard Level 4 scenario and code display in `ai-security-defense-lab/levels/level4_payguard.py`
+| Artefact reviewed | Purpose in this assessment |
+|---|---|
+| [AI governance policy](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md) | Compared stated controls with their implementation, particularly Sections 4.1–4.3, 5.2, 6.1–6.2, 7.1–7.2 and 8. |
+| [System architecture](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/system-architecture.md) | Checked the documented tenant model, deployment path, monitoring gaps and known operational limitations. |
+| [Authentication middleware](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py) | Checked how the token is decoded and whether the requested tenant is authorised against the authenticated client. |
+| [Fine-tuning pipeline](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py) | Checked data-source validation, training flow and whether deployment is gated by evaluation or approval. |
+| [Training-data manifest](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/training_data_manifest.json) and [pipeline configuration](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/pipeline_config.yaml) | Checked approval, hash-verification, schema-validation and bias-review status for each source. |
+| [Credit model card](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/credit_model_card.md) | Checked intended use, evaluation status, fairness limitations and source-provenance review. |
+| [Sample audit log](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json) | Correlated the 1 October 2024 pipeline run and automatic production deployments with the documented incident timeline. |
+| [Incident 001 — loan approval anomaly](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-001.md) and [Incident 002 — fraud model regression](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-002.md) | Checked the recorded symptoms, status and stated unknowns. |
 
-**Not available for this review**
+### Assessment approach
 
-- The client’s actual AI governance policy document, including clause and page numbers.
-- A production audit log or log export.
+I used the **NIST AI Risk Management Framework (NIST AI RMF)** as the diagnostic structure:
 
-I have not invented policy quotations, policy page references, or audit-log evidence. The policy-claim fields below describe the control that needs to be checked; they are not presented as verbatim clauses from an unseen policy. These fields must be replaced with exact policy wording before final submission.
+- **GOVERN:** policies, roles and accountability.
+- **MAP:** risks are identified and contextualised.
+- **MEASURE:** risks and model behaviour are evaluated and tracked.
+- **MANAGE:** controls, approvals and responses are put into operation.
 
-## 3. Framework Used
+For each finding, I applied the five policy-reading questions from my S28/S29 notes: What control is claimed? Is a process defined? Who is accountable? What happens when a control fails? Does the code match the policy? I used the **OWASP Top 10 for Large Language Model Applications (OWASP LLM Top 10)** only where the categories in my notes fit the observed risk.
 
-I used the NIST AI Risk Management Framework as the diagnostic structure:
+### Evidence standard and limitations
 
-- **GOVERN:** policies, roles, and accountability.
-- **MAP:** identify and understand risks.
-- **MEASURE:** evaluate and track risks.
-- **MANAGE:** implement controls and respond to risks.
+The findings below are based on the cited repository files and the sample audit log. A file or line citation establishes what the repository contains; it does not by itself prove that the same code is deployed unchanged in production. I did not execute exploit attempts, run model evaluations, or reproduce either incident. Where the evidence does not establish root cause, a successful cross-tenant exploit, or the existence of controls outside the reviewed path, I say so. The policy is a Markdown file, so I cite its section and GitHub line range rather than inventing a page number.
 
-I used the OWASP LLM categories covered in my fellowship notes where they fit the evidence. Severity is based on the potential business impact and the extent to which the available code fails to enforce the expected control.
+## 3. Findings
 
-## 4. Findings
+### Finding 1 — Tenant isolation is stated in policy but is not enforced by the reviewed API path
 
-### Finding 1 — Client-supplied tenant identity is trusted
+**Policy claim.** Section 8 states that authenticated clients can access only their own data and that tenant isolation is enforced at the API layer through JSON Web Token (JWT) authentication ([policy §8, lines 96–98](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L96-L98)).
 
-**Policy claim to verify:** Each client must only be able to retrieve their own records, with tenant identity verified against the authenticated session.  
-**Policy evidence:** Exact clause and page are outstanding because the policy document was not available.
+**What I observed.** In the reviewed middleware, `decode_jwt()` calls `_stub_decode()`; the stub returns a hard-coded client identity and expiry rather than validating the supplied token ([`auth_middleware.py`, lines 23–37](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L23-L37)). The score-request handler reads `tenant_id` from the request body, checks only that it is present, and passes it to the scoring function without comparing it with the authenticated client ([lines 40–55](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L40-L55)). The score-retrieval handler similarly passes the requested tenant to the record-fetch function without a visible authorisation comparison ([lines 69–79](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L69-L79)).
 
-**What I observed:** The configuration comment says that `tenant_id` is read directly from the request. `TRUST_CLIENT_TENANT_ID = True` and `VERIFY_TENANT_SESSION = False` are set in `fixtures/level4_payguard/rag_config.py` (lines 7–10). The same file configures one shared vector index and leaves `METADATA_FILTER_ENFORCED = False` (lines 12–15). The PayGuard lab scenario describes cross-tenant retrieval when a different tenant identifier is supplied.
+This is a source-level gap in the reviewed path. The functions return mock scoring records, and I have not performed a live test; therefore, I am not claiming that I successfully retrieved another client's production data.
 
-**NIST AI Risk Management Framework:** **GOVERN** — the access boundary and responsibility for enforcing tenant isolation are not adequately implemented in the available configuration. This matches the governance mapping in my fellowship notes for cross-tenant API access controls.
+**NIST AI RMF mapping.** **GOVERN** — the policy's accountability and access boundary are not demonstrated by the reviewed implementation.
 
-**OWASP LLM Top 10:** **LLM06 — Sensitive Information Disclosure**, as used in my fellowship notes for tenant-isolation controls that are not verified end-to-end.
+**OWASP LLM Top 10 mapping.** **LLM06 — Sensitive Information Disclosure**, consistent with the fellowship notes' mapping for tenant-isolation controls that are not verified end to end.
 
-**Severity: HIGH.** A client may be able to retrieve another client’s confidential financial records. The potential impact includes exposure of portfolio, estate-planning, and advisory information. The configuration directly shows that the client-supplied tenant value is trusted and that the metadata filter is disabled.
+**Severity: HIGH.** If the reviewed logic is used as the enforcement path, a client-controlled tenant value could cross the intended data boundary. In a multi-client financial service, that creates a material risk to confidential applicant and scoring records.
 
-**Recommended remediation:** The engineering owner should derive tenant identity from the authenticated session and enforce tenant isolation at the database/vector-store layer, not from a client-controlled request field. Enable and verify the required tenant filter, then test that cross-tenant requests are denied. Retain the test results and access-control evidence for review.
+**Recommended remediation — owner and deadline.** The **API/platform engineering owner** should, within **7 days**, replace the stub with cryptographic JWT validation, derive the authorised tenant from verified claims, reject tenant mismatches on both scoring and retrieval paths, and add automated negative tests proving that one client cannot access another client's records. The release evidence should include passing cross-tenant tests and a review of the enforcement code.
 
-**Code evidence:** [\`rag_config.py\` lines 7–15](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/rag_config.py#L7-L15).
+**Evidence links:** [Policy §8](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L96-L98) · [JWT decoding](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L23-L37) · [Score request](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L40-L55) · [Score retrieval](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/api/auth_middleware.py#L69-L79)
 
-### Finding 2 — Fine-tuning validation is declared but not connected to the pipeline steps
+### Finding 2 — Training-data validation can accept an unreviewed external source
 
-**Policy claim to verify:** Training data must be integrity-checked and approved before it is used for fine-tuning.  
-**Policy evidence:** Exact clause and page are outstanding because the policy document was not available.
+**Policy claim.** Section 4.1 requires all training sources to be listed in the manifest and says external sources need documented approval before being added. Section 4.2 says training pipelines include quality checks before training ([policy §§4.1–4.2, lines 40–48](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L40-L48)).
 
-**What I observed:** The pipeline sets `VALIDATE_DATA_INTEGRITY = True` and `REQUIRE_SOURCE_SIGNOFF = True` in `fixtures/level4_payguard/finetune_pipeline_dag.py` (lines 8–11), and defines a checksum validation function (lines 15–25). However, `pull_training_data()` and `fine_tune_model()` contain only `pass` (lines 27–33). The DAG connects those two functions (lines 35–44), but the available implementation does not show the validation function being called or the source sign-off being enforced. The flags alone do not prove that the control operates.
+**What I observed.** The manifest marks `bureau_data_external_v2` as `unreviewed`, with hash verification, schema enforcement and bias review all set to false; its notes say that formal review has not been scheduled ([`training_data_manifest.json`, lines 39–47](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/training_data_manifest.json#L39-L47)). The pipeline configuration nevertheless enables that source ([`pipeline_config.yaml`, lines 33–42](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/pipeline_config.yaml#L33-L42)). In `validate_source()`, the external-source branch explicitly skips hash verification and returns `True`; for other source types, the reviewed function logs that a schema check passed and returns `True` without implementing a check in that function ([`fine_tuning_pipeline.py`, lines 63–72](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L63-L72)).
 
-**NIST AI Risk Management Framework:** **MAP** — training-data poisoning risk needs to be identified and understood. **MANAGE** is also relevant because the intended validation and sign-off must be enforced before training.
+The audit log records the 1 October 2024 pipeline run loading `bureau_data_external_v2` alongside the other sources ([audit log, lines 11791–11798](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11791-L11798)). The completed run record shows that both credit and fraud models were retrained ([lines 11804–11813](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11804-L11813)). These records show that the source was included in the recorded run; they do not by themselves prove the contents of the dataset or that it caused a later incident.
 
-**OWASP LLM Top 10:** **LLM03 — Training Data Poisoning**, matching the training-data governance gap described in my fellowship notes.
+**NIST AI RMF mapping.** **MAP** — the risk of unreviewed or tampered training data is not adequately identified and validated. **MANAGE** also applies because the pipeline does not fail closed when required source checks are absent.
 
-**Severity: HIGH.** If the pipeline processes unvalidated data, a tampered or poisoned batch could affect model behaviour. The concern is not that a Boolean flag is missing; it is that the available task functions do not implement the data pull, validation, or fine-tuning actions described in their docstrings.
+**OWASP LLM Top 10 mapping.** **LLM03 — Training Data Poisoning.**
 
-**Recommended remediation:** The ML engineering owner should implement the data pull and connect it to checksum validation against an approved manifest, enforce source approval before training, and quarantine files that fail validation. Add tests proving that an unapproved or modified file cannot reach the fine-tuning step. Keep the approval record and test output as audit evidence.
+**Severity: HIGH.** Unreviewed data is enabled and accepted by the reviewed training path without the integrity checks described by the policy. This can undermine model quality or introduce biased or manipulated data into models used for financial decisions.
 
-**Code evidence:** [\`finetune_pipeline_dag.py\` lines 8–25](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/finetune_pipeline_dag.py#L8-L25) and [lines 27–44](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/finetune_pipeline_dag.py#L27-L44).
+**Recommended remediation — owner and deadline.** The **data-platform/MLOps owner** should disable `bureau_data_external_v2` until documented approval is recorded, and within **14 days** implement fail-closed approval, schema, hash and required bias-review checks for every enabled source. Tests must demonstrate that an unapproved source, missing integrity metadata or failed validation stops the run, with the decision and test output retained as audit evidence.
 
-### Finding 3 — External embedding model source has no stated verification
+**Evidence links:** [Policy §§4.1–4.2](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L40-L48) · [Manifest source status](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/training_data_manifest.json#L39-L47) · [Enabled source configuration](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/pipeline_config.yaml#L33-L42) · [Validation function](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L63-L72) · [Audit-log pipeline start](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11791-L11798)
 
-**Policy claim to verify:** Third-party AI components must be reviewed and approved before use.  
-**Policy evidence:** Exact clause and page are outstanding because the policy document was not available.
+### Finding 3 — The reviewed fine-tuning path deploys models automatically without showing a pre-deployment approval gate
 
-**What I observed:** `fixtures/level4_payguard/rag_config.py` states that the embedding model is pulled from a community account and that there is no model card or publisher verification (lines 22–24). The configured source is `community-embeddings/finance-embed-v2` (line 24). The available artefact does not show a supplier approval record or provenance verification.
+**Policy claim.** Section 5.2 says models are evaluated on a held-out test set before deployment and that evaluation results are recorded in the model card. Section 6.1 says production deployments are logged with a trigger and version identifier; Section 6.2 describes retaining a previous version for rollback ([policy §§5.2–6.2, lines 62–80](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L62-L80)).
 
-**NIST AI Risk Management Framework:** **GOVERN** — the organisation needs accountable processes for approving and managing external AI components.
+**What I observed.** After the fine-tuning function records a training output path, it calls `_deploy_model()` directly; the reviewed function logs deployment without an evaluation or human-approval check in that path ([`fine_tuning_pipeline.py`, lines 89–100](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L89-L100)). The pipeline loops over both the credit and fraud models and runs the same function for each ([lines 103–108](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L103-L108)). The audit log confirms production deployments of credit model v2.3.1 and fraud model v1.8.2 with `triggered_by: pipeline_auto` on 1 October 2024 ([audit log, lines 11817–11836](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11817-L11836)).
 
-**OWASP LLM Top 10:** No direct category from the OWASP governance mappings in my fellowship notes is asserted for this finding. I have kept the finding focused on supplier management rather than forcing an unrelated category.
+The fraud incident report says the regression began around the 1 October pipeline run and that the root cause was unknown at the time of the report ([Incident 002, lines 18–33](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-002.md#L18-L33)). The audit log includes post-run transactions marked PASS despite matching profiles previously flagged, for example TXN-88288 ([audit log, lines 11846–11856](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11846-L11856)). This is relevant evidence for investigation, but it does **not** prove the pipeline caused the regression.
 
-**Severity: MEDIUM.** The source is explicitly described as unverified, but the available evidence does not establish that the model itself is malicious. The concern is the lack of assurance about its publisher and provenance before it is used in a financial assistant.
+**NIST AI RMF mapping.** **MANAGE** — the reviewed deployment path does not show a gate that prevents promotion until evaluation and approval requirements have been met.
 
-**Recommended remediation:** The ML/platform owner should verify the publisher and model provenance, review available model documentation, record the approval decision, and pin the approved model version and integrity information before deployment. If the source cannot be verified, replace it with an approved source.
+**OWASP LLM Top 10 mapping.** **LLM09 — Overreliance**, using the fellowship notes' mapping for missing human review before automated decisions. The finding concerns the model promotion process; it does not establish that every individual credit decision is automatically made.
 
-**Code evidence:** [\`rag_config.py\` lines 22–24](https://github.com/Ikankeabasi/ai-security-defense-lab/blob/main/fixtures/level4_payguard/rag_config.py#L22-L24).
+**Severity: HIGH.** Both models are promoted through a shared pipeline, and the repository documents a fraud-regression incident after the recorded run. Without a verifiable evaluation and approval gate, an unsafe model version can reach production before an accountable reviewer has accepted the risk.
 
-## 5. Regulatory Exposure Summary
+**Recommended remediation — owner and deadline.** The **CTO and ML-platform owner** should, before the **next production promotion and no later than 7 days**, block automatic deployment unless held-out evaluation results meet documented acceptance thresholds and a named reviewer approves promotion. The pipeline must record the model version, test result, approver and deployment trigger; a test must prove that a missing evaluation result or approval prevents deployment. The incident owner should assess rollback against the incident evidence rather than assume the pipeline was the root cause.
 
-The mappings below use the control areas identified in my fellowship notes. The EU AI Act mapping is conditional: the materials available to me do not establish that PayGuard is legally classified as a high-risk AI system or that the relevant EU jurisdictional conditions are met. A legal/compliance owner should confirm applicability before this is represented as a binding obligation.
+**Evidence links:** [Policy §§5.2–6.2](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L62-L80) · [Pipeline deployment call](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L89-L100) · [Pipeline model loop](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/fine_tuning_pipeline.py#L103-L108) · [Production deployment audit events](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/data/sample_audit_log.json#L11817-L11836) · [Fraud incident status](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-002.md#L18-L33)
 
-| Finding | Framework / regulation | Specific article, section, or control area | Why it is relevant |
+### Finding 4 — Fairness assessment and drift detection are incomplete while model-behaviour incidents remain open
+
+**Policy claim.** Section 5.2 requires pre-deployment evaluation, while Section 7.1 describes monitoring for latency and availability and reviewing significant model-output anomalies reported by enterprise clients. Section 7.2 requires incidents to be documented and assigned to a responsible owner ([policy §§5.2 and 7.1–7.2, lines 62–92](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L62-L92)).
+
+**What I observed.** The credit model card says fairness evaluation has not been completed for the v2.3.x series, postcode-level demographic parity has not been evaluated, and regions with less complete bureau data may be systematically underscored. It also says data sources added after v2.1.0 have not undergone formal bias review ([`credit_model_card.md`, lines 33–57](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/credit_model_card.md#L33-L57)). The architecture lists model-drift alerting as not configured ([`system-architecture.md`, lines 63–66](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/system-architecture.md#L63-L66)).
+
+Incident 001 records a client report of approval rates in Lagos Southwest postcodes being 34% above the national baseline over six days, states that the root cause is unknown, and remains open ([Incident 001, lines 8–32](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-001.md#L8-L32)). Incident 002 separately records a fraud-model regression and also remains open with no root cause identified ([Incident 002, lines 8–33](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-002.md#L8-L33)). These records establish unresolved model-behaviour concerns, not their root cause or proof of discriminatory impact.
+
+**NIST AI RMF mapping.** **MAP** — known postcode and data-completeness limitations have not been fully assessed through a documented fairness evaluation. **MEASURE** — automated drift alerting is not configured. **MANAGE** is relevant to the need to assign owners and make a documented response decision for the open incidents.
+
+**OWASP LLM Top 10 mapping.** No direct OWASP LLM category is assigned to this finding: the evidence concerns credit-model fairness, performance drift and incident handling, and I have not forced it into an unrelated category from the fellowship notes.
+
+**Severity: HIGH.** Lending outcomes may be affected by postcode-level data-completeness differences, and the absence of drift alerts means changes may be noticed only after a client report. The open incidents make documented triage and a measurable monitoring process material priorities.
+
+**Recommended remediation — owner and deadline.** The **model-risk owner**, with the credit and fraud model owners, should within **48 hours** assign named owners and record the triage and containment decisions for both incidents. Within **14 days**, the team should run and document postcode-level fairness tests, define acceptable thresholds and escalation rules, configure drift/performance alerts, and retain evaluation and alert-test evidence. The team must document the root cause only when supported by evidence.
+
+**Evidence links:** [Policy evaluation and monitoring](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L62-L92) · [Credit model card](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/model/credit_model_card.md#L33-L57) · [Architecture known gaps](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/system-architecture.md#L63-L66) · [Incident 001](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-001.md#L8-L32) · [Incident 002](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/incidents/incident-002.md#L8-L33)
+
+## 4. Regulatory Exposure Summary
+
+The mappings below use the control areas listed in my S28/S29 fellowship notes. The EU AI Act mappings are **conditional**: the repository concerns a financial-services system and the notes identify credit scoring in Annex III, but the reviewed materials do not establish the system's territorial scope or a final legal classification. I therefore treat these as exposure areas for legal/compliance review, not as a conclusion that NovaPay has breached a binding EU obligation. The notes name the control areas for ISO/IEC 42001 but do not provide numbered ISO clauses, so I have not invented clause numbers.
+
+| Finding | Framework or regulation | Specific article, section or control area | Exposure and evidence basis |
 |---|---|---|---|
-| 1. Tenant isolation | ISO/IEC 42001 | **Risk assessment** control area | The system needs an identified and assessed risk around cross-tenant access to confidential client information. |
-| 1. Tenant isolation | EU AI Act, conditional | **Article 9 — risk management system**, only if the system is in scope and the relevant high-risk requirements apply | The fellowship notes identify Article 9 in the context of risk management for high-risk AI. Applicability needs confirmation; this report does not conclude that PayGuard is high-risk. |
-| 2. Training-data validation | ISO/IEC 42001 | **Supplier management** and **risk assessment** control areas | External data sources and training-data integrity need defined controls and risk review. |
-| 2. Training-data validation | EU AI Act, conditional | **Article 9 — risk management system**, only if the system is in scope and the relevant high-risk requirements apply | Data-related risks and their controls would need to be addressed if the high-risk requirements apply. Legal classification remains unconfirmed. |
-| 3. Embedding-model provenance | ISO/IEC 42001 | **Supplier management** control area | The model comes from an external community source without stated publisher verification. A supplier approval and review process is needed. |
+| 1. Tenant isolation | ISO/IEC 42001 | **Risk assessment**; **Roles and responsibilities** | Cross-tenant access is a material risk that needs a defined enforcement owner and evidence that the access boundary works. The policy promise in §8 is not matched by an authorisation comparison in the reviewed middleware. |
+| 2. Training-data validation | ISO/IEC 42001 | **Supplier management**; **Risk assessment** | The enabled external source is marked unreviewed and lacks hash, schema and bias-review status; the reviewed pipeline accepts it rather than failing closed. |
+| 3. Automatic deployment | ISO/IEC 42001 | **Roles and responsibilities**; **Monitoring and audit** | The reviewed pipeline and audit log show automatic production promotion, but do not show a recorded evaluation result and human approval gate. |
+| 3. Automatic deployment | EU AI Act — conditional | **Annex III (credit scoring)** and **Article 9 (risk management system)**, if the system and operator fall within scope and the high-risk requirements apply | Relevant to documented risk controls around a credit-scoring system. Legal applicability and the required conformity process must be confirmed by the responsible legal/compliance owner. |
+| 4. Fairness and drift | ISO/IEC 42001 | **Risk assessment**; **Monitoring and audit**; **Incident management** | The model card records incomplete fairness work, the architecture says drift alerting is not configured, and two incident reports remain open. |
+| 4. Fairness and drift | EU AI Act — conditional | **Annex III (credit scoring)** and **Article 9 (risk management system)**, if applicable | Potentially relevant to assessing and managing risks for high-risk credit-scoring AI. The evidence here does not establish EU jurisdictional scope or a legal breach. |
 
-**Regulatory limitation:** The available fellowship notes name ISO/IEC 42001 control areas but do not provide numbered ISO clauses. I have therefore named the control areas rather than inventing clause numbers. The client policy and legal applicability must be checked before the table is finalised.
+NovaPay's policy also says it operates under Central Bank of Nigeria (CBN) guidelines in Section 9 ([policy §9, lines 102–110](https://github.com/AibinuolaDamilola/hernetiq/blob/main/novapay-ai-core/governance/ai_policy_v1.md#L102-L110)). The repository does not identify a particular CBN guideline provision for these findings, so I have not assigned a CBN article or section without evidence.
+
+## 5. Prioritised Remediation Plan
+
+| Priority | Action | Owner | Target | Completion evidence |
+|---|---|---|---|---|
+| 1 | Correct JWT validation and enforce tenant identity on both score and retrieval endpoints. | API/platform engineering | Within 7 days | Verified token-validation code; passing cross-tenant denial tests; review record. |
+| 2 | Disable unreviewed external training data and enforce fail-closed source approval, hash, schema and bias-review checks. | Data platform / MLOps | Disable source immediately; controls and tests within 14 days | Approved manifest record, validation tests showing rejection on failure, retained logs. |
+| 3 | Block automatic production promotion until model evaluation passes documented criteria and a named reviewer approves. | CTO / ML platform | Before next promotion, no later than 7 days | Pipeline gate test; held-out evaluation results; approver, version and deployment trigger in audit trail. |
+| 4 | Triage both open incidents, assign named owners, run postcode fairness checks and configure drift monitoring. | Model risk and model owners | Owners/triage within 48 hours; testing and alerts within 14 days | Incident records with owners and decisions; fairness results; drift thresholds; alert-test evidence. |
 
 ## 6. Overall Verdict
 
-**The governance programme cannot yet be considered fit for purpose based on the available evidence**, because the inspected configuration does not enforce important tenant-isolation and supply-chain controls, and the policy and audit log needed to complete the independent assessment were not available for verification.
+**Verdict: NovaPay's AI governance programme is not fit for purpose in its currently evidenced state.**
 
-## 7. Remediation Priorities
+The reviewed repository shows an unenforced tenant boundary, training-data checks that can be bypassed, automatic production promotion without an evidenced evaluation-and-approval gate, and incomplete fairness/drift controls while relevant incidents remain unresolved.
 
-1. **Engineering / Platform — immediately:** enforce tenant isolation using the authenticated session and database/vector-store controls; verify cross-tenant access is denied.
-2. **ML Engineering — before the next training run:** implement and test training-data integrity validation and source approval; block unapproved data from fine-tuning.
-3. **ML Platform / Supplier owner — before deployment of the embedding model:** verify and document model provenance and approval.
-4. **Governance / Legal — before final evidence submission:** provide the actual policy document and confirm the applicable regulatory scope; add exact policy clause/page citations.
-5. **System owner — before final evidence submission:** provide the relevant audit log and record what it shows. I have not claimed to have reviewed a log that was not available.
+## 7. Evidence Verification Record
 
-## 8. Evidence Verification Record
-
-| Evidence item | Current status |
+| Verification question | Result |
 |---|---|
-| `rag_config.py` source references | Cited by file and line |
-| `finetune_pipeline_dag.py` source references | Cited by file and line |
-| Actual governance policy clause and page | **Outstanding — policy file not available** |
-| Audit log entry or log review | **Outstanding — log not available** |
-| Runtime reproduction / test output | **Not claimed in this report; add only after running and recording the test** |
-| Regulatory applicability review | **Outstanding — confirm with the appropriate legal/compliance owner** |
+| Did I review the actual policy and relevant code? | Yes — the policy, authentication middleware, fine-tuning pipeline, model card, manifest, configuration, architecture and incident records are cited above. |
+| Did I review the audit log? | Yes — I inspected the sample JSON audit log and cited the pipeline-run, production-deployment and fraud-check records used in this assessment. |
+| Did I run live or runtime tests? | No. The assessment is a source-level review; runtime exploitability and production parity have not been independently tested. |
+| Did I confirm that the external dataset caused an incident? | No. The run and incident timelines are relevant, but Incident 002 explicitly records that its root cause was unknown. |
+| Did I confirm that the loan-approval anomaly was discriminatory? | No. Incident 001 records an approval-rate difference and states that the direction and cause were not established. |
+| Did I confirm EU AI Act applicability or a CBN breach? | No. The required jurisdictional and legal classification evidence is not established in the reviewed repository. |
+| Did I change NovaPay's code? | No. I produced this assessment in my fellowship portfolio; I did not modify the NovaPay case repository. |
 
-## 9. Career Passport Evidence Standard
+## 8. Career Passport Evidence Notes
 
-- **What did I do?** I compared the available PayGuard configuration and pipeline code with the expected governance controls.
-- **What security problem was I solving?** I checked whether tenant isolation, training-data integrity, and external model-source verification were enforced.
-- **What did I change or build?** I created a structured governance gap assessment and regulatory exposure summary.
-- **How did I verify my result?** I cited the code files and exact line ranges. Runtime testing and audit-log verification are not claimed until they are actually completed.
-- **What was difficult or unclear?** The actual policy document and audit log were not available, so I could not confirm exact policy wording, page references, or log evidence.
+- **What did I do?** I compared NovaPay's stated governance controls with the reviewed API code, training pipeline, model documentation, configuration, incident reports and audit log.
+- **What security problem was I investigating?** I checked whether tenant isolation, training-data integrity, deployment control, fairness evaluation and incident monitoring were supported by implementation evidence.
+- **What did I build?** I produced a four-finding governance gap assessment, a regulatory exposure summary and a prioritised remediation plan with owners, deadlines and verification evidence.
+- **How did I verify it?** I linked each finding to exact policy sections and code lines and correlated relevant audit-log events with the recorded incidents. I have not claimed runtime testing.
+- **What remains unclear?** The reviewed files do not establish live exploitability, whether additional controls exist outside the reviewed path, or the root causes of the open incidents. The legal applicability of EU AI Act requirements also requires confirmation.
 
-## 10. Outstanding Before Submission
+---
 
-To meet Evidence Brief A’s full standard, I still need the actual policy document and audit log. Once provided, I will quote each exact policy clause, add its page reference, compare it with the code evidence above, and update this assessment without guessing or inventing evidence.
+**Assessment basis:** The technical findings above are based on the cited NovaPay GitHub repository. The framework names and control mappings follow the provided S28/S29 notes; no unreferenced runtime result or external legal conclusion has been added.
