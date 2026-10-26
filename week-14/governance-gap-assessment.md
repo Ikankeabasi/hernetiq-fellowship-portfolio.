@@ -156,15 +156,3 @@ The reviewed repository shows an unenforced tenant boundary, training-data check
 | Did I confirm that the loan-approval anomaly was discriminatory? | No. Incident 001 records an approval-rate difference and states that the direction and cause were not established. |
 | Did I confirm EU AI Act applicability or a CBN breach? | No. The required jurisdictional and legal classification evidence is not established in the reviewed repository. |
 | Did I change NovaPay's code? | No. I produced this assessment in my fellowship portfolio; I did not modify the NovaPay case repository. |
-
-## 8. Career Passport Evidence Notes
-
-- **What did I do?** I compared NovaPay's stated governance controls with the reviewed API code, training pipeline, model documentation, configuration, incident reports and audit log.
-- **What security problem was I investigating?** I checked whether tenant isolation, training-data integrity, deployment control, fairness evaluation and incident monitoring were supported by implementation evidence.
-- **What did I build?** I produced a four-finding governance gap assessment, a regulatory exposure summary and a prioritised remediation plan with owners, deadlines and verification evidence.
-- **How did I verify it?** I linked each finding to exact policy sections and code lines and correlated relevant audit-log events with the recorded incidents. I have not claimed runtime testing.
-- **What remains unclear?** The reviewed files do not establish live exploitability, whether additional controls exist outside the reviewed path, or the root causes of the open incidents. The legal applicability of EU AI Act requirements also requires confirmation.
-
----
-
-**Assessment basis:** The technical findings above are based on the cited NovaPay GitHub repository. The framework names and control mappings follow the provided S28/S29 notes; no unreferenced runtime result or external legal conclusion has been added.
