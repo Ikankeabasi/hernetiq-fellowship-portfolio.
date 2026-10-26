@@ -13,7 +13,7 @@ The review identifies material weaknesses in the controls protecting enterprise-
 
 ## 2. Assessment Scope
 
-I reviewed the following artefacts in the provided NovaPay GitHub repository. I used the source code and records as evidence; I did not modify NovaPay's source code or conduct live production testing.
+I reviewed the following artefacts in the provided NovaPay GitHub repository. I used the source code and records as evidence.
 
 | Artefact reviewed | Purpose in this assessment |
 |---|---|
