@@ -6,15 +6,14 @@
 
 ## Deliverables
 
-The editable **two-page Word report** is supplied separately for review and editing. It is intentionally not stored in this GitHub folder; I will upload my final edited version myself.
+1. [Enterprise compliance gap analysis report](./compliance-gap-analysis-report.md) — board-facing report with executive summary, four business-impact findings, regulatory exposure table, prioritised actions, owners, timeframes and measurable outcomes.
+2. [Regulatory exposure table](./regulatory-exposure-table.md) — four findings mapped to named EU AI Act articles, with a legal-scope limitation.
+3. [Recommended actions list](./recommended-actions.md) — four prioritised actions, each with an owner role, timeframe and measurable outcome.
 
-The supporting Markdown artefacts in this folder are:
-
-1. [Regulatory exposure table](./regulatory-exposure-table.md) — the four gaps mapped to named EU AI Act articles and a clear legal-scope caveat.
-2. [Recommended actions list](./recommended-actions.md) — four prioritised actions with accountable owner roles, deadlines and measurable outcomes.
+An editable Word copy of the report is also supplied separately for review and editing. The mission brief says “Document” and does **not** require PDF format; therefore, PDF is not treated as a required submission format. The Markdown report is included here so the report can be read and edited directly in GitHub.
 
 ## Evidence basis and limitations
 
-These artefacts were prepared from the supplied S28/S29 section notes, Evidence Brief B and the Week 14 NovaPay governance gap assessment. The source-level assessment does not claim live production testing or establish the cause of either open incident. EU AI Act references are potential exposure areas only until legal/compliance confirms the intended use, affected persons and territorial scope.
+These artefacts were prepared from the supplied S28/S29 section notes, Evidence Brief B and the Week 14 NovaPay governance gap assessment. The assessment does not claim live production testing or establish the cause of either open incident. EU AI Act references are potential exposure areas only until legal/compliance confirms the intended use, affected persons and territorial scope.
 
 **Scope:** Week 15 only. The portfolio's main README and all other weeks are outside this task.
