@@ -23,7 +23,7 @@ Credit decisions may be degraded or biased. The policy requires approval for ext
 
 A harmful model change could reach customers before its risks are understood. The policy requires evaluation before release, while records show the credit and fraud models were automatically placed into live use on 1 October 2024; the reviewed material does not evidence a pre-release approval gate. A fraud regression was reported after the run, but its cause remains unconfirmed. Where applicable, **Article 9** requires an ongoing risk-management system and **Article 43** sets the relevant conformity-assessment procedure for high-risk systems before market placement or putting into service. **Action:** the CTO and model owner should block unapproved releases before the next promotion and no later than 7 days.
 
-### 4. Fairness and drift monitoring gaps
+### 4. Fairness and changing decision patterns
 
 Unfair or deteriorating decisions may go unnoticed. The model documentation says fairness evaluation is incomplete and uneven data coverage may disadvantage some regions; automatic alerts for significant changes in decision patterns are not configured. One open incident records an approval rate 34% above the national baseline in Lagos Southwest, while a separate fraud issue also remains open. Neither root cause is established. Where applicable, **Article 10** addresses the quality and governance of data used by applicable high-risk systems, while **Article 9** requires risk management throughout the system lifecycle. **Action:** the model-risk owner should triage both incidents within 48 hours and deliver fairness and monitoring evidence within 14 days.
 
@@ -34,7 +34,7 @@ Unfair or deteriorating decisions may go unnoticed. The model documentation says
 | Customer data separation | Article 15; Article 9 | Cybersecurity appropriate to the system and a documented process to identify, evaluate and address risk. |
 | Unreviewed training data | Article 10; Article 9 | Data governance and quality criteria for training, validation and test data; risk controls for identified risks. |
 | Model releases without evidenced approval | Article 9; Article 43 | Lifecycle risk management and the relevant conformity-assessment route for applicable high-risk systems before placement or putting into service. Article 43 does not by itself mean every routine retraining needs a new assessment. |
-| Fairness and drift monitoring gaps | Article 10; Article 9 | Data quality and an ongoing process for identifying, evaluating and addressing risks. |
+| Fairness and changing decision patterns | Article 10; Article 9 | Data quality and an ongoing process for identifying, evaluating and addressing risks. |
 
 **Applicability caveat:** Legal scope is not established by the reviewed records. Annex III, point 5(b), addresses AI used to evaluate creditworthiness of natural persons or establish their credit score; this case describes SME loan applications. Legal/compliance should confirm intended use, affected persons and territorial scope before treating EU AI Act provisions as binding obligations. These are potential exposure areas, not a finding of a legal breach.
 
