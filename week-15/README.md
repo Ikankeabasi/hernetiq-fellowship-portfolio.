@@ -4,15 +4,14 @@
 **Audience:** Board and investor due diligence  
 **Source assessment:** [Week 14 Governance Gap Assessment](../week-14/governance-gap-assessment.md)
 
-## Deliverables in this folder
-
-1. [Compliance gap analysis report — Markdown source](./compliance-gap-analysis-report.md)
-2. [Regulatory exposure table](./regulatory-exposure-table.md)
-3. [Recommended actions list](./recommended-actions.md)
+## Deliverables
 
 The editable **two-page Word report** is supplied separately for review and editing. It is intentionally not stored in this GitHub folder; I will upload my final edited version myself.
 
-The report translates the same four NovaPay findings from Week 14 into board language and includes an executive summary, four business-impact findings, an EU AI Act exposure table, and prioritised actions with an owner role, timeframe and measurable outcome.
+The supporting Markdown artefacts in this folder are:
+
+1. [Regulatory exposure table](./regulatory-exposure-table.md) — the four gaps mapped to named EU AI Act articles and a clear legal-scope caveat.
+2. [Recommended actions list](./recommended-actions.md) — four prioritised actions with accountable owner roles, deadlines and measurable outcomes.
 
 ## Evidence basis and limitations
 
