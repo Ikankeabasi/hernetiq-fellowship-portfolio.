@@ -4,12 +4,18 @@
 **Audience:** Board and investor due diligence  
 **Source assessment:** [Week 14 Governance Gap Assessment](../week-14/governance-gap-assessment.md)
 
-## Required deliverables
+## Deliverables in this folder
 
-1. [Compliance gap analysis report (PDF, exactly two pages)](./compliance-gap-analysis-report.pdf) and [Markdown source](./compliance-gap-analysis-report.md)
-2. [Regulatory exposure table (PDF)](./regulatory-exposure-table.pdf) and [Markdown source](./regulatory-exposure-table.md)
-3. [Recommended actions list (PDF)](./recommended-actions.pdf) and [Markdown source](./recommended-actions.md)
+1. [Compliance gap analysis report — Markdown source](./compliance-gap-analysis-report.md)
+2. [Regulatory exposure table](./regulatory-exposure-table.md)
+3. [Recommended actions list](./recommended-actions.md)
 
-The report translates the same four NovaPay findings from Week 14 into board language, with no code citations or tool names in the report itself. It contains the executive summary, findings, regulatory exposure table, and prioritised action list with an owner, timeframe and measurable outcome. The regulatory mappings name EU AI Act articles but explicitly state that legal scope and classification must be confirmed.
+The editable **two-page Word report** is supplied separately for review and editing. It is intentionally not stored in this GitHub folder; I will upload my final edited version myself.
 
-**Scope note:** These portfolio artefacts were prepared from the supplied S28/S29 notes, Evidence Brief B and the Week 14 assessment. The report does not claim live production testing or establish the root cause of either open incident.
+The report translates the same four NovaPay findings from Week 14 into board language and includes an executive summary, four business-impact findings, an EU AI Act exposure table, and prioritised actions with an owner role, timeframe and measurable outcome.
+
+## Evidence basis and limitations
+
+These artefacts were prepared from the supplied S28/S29 section notes, Evidence Brief B and the Week 14 NovaPay governance gap assessment. The source-level assessment does not claim live production testing or establish the cause of either open incident. EU AI Act references are potential exposure areas only until legal/compliance confirms the intended use, affected persons and territorial scope.
+
+**Scope:** Week 15 only. The portfolio's main README and all other weeks are outside this task.
