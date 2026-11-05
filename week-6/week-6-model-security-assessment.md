@@ -1,6 +1,6 @@
 ## 1. Assessment Context
 
-DataForge ML is an intentionally vulnerable BioTech AI pipeline. This Level 2 exercise focuses on AI model supply-chain security: verifying that a model obtained from an external repository is trustworthy before it is loaded into a production inference pipeline.
+DataForge ML is a BioTech AI pipeline. This Level 2 exercise focuses on AI model supply-chain security: verifying that a model obtained from an external repository is trustworthy before it is loaded into a production inference pipeline.
 
 The vulnerable deployment downloads a model from a public Hugging Face repository and loads it with Python Pickle without a pre-load integrity or security check.
 
