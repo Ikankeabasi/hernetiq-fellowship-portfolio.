@@ -4,7 +4,7 @@
 
 Phase 2 built on the initial assessment. The team reviewed and prioritised the assessment work, supported remediation activities, considered the available verification evidence and prepared the final outputs for technical and business stakeholders.
 
-The work was part of a simulated pre-investment security and AI-risk assessment. This public summary describes the work at a high level and does not disclose confidential engagement information.
+The work was part of a simulated pre-investment security and AI-risk assessment. This public summary describes the work at a high level.
 
 ## What the team did
 
@@ -30,4 +30,4 @@ A security report is most useful when it does more than list technical issues: i
 
 ---
 
-*Public portfolio summary only. Full reports, findings register, testing log, pull-request evidence, roadmap and presentation were submitted through the fellowship Career Passport. No organisation or individual names, specific findings, internal links, code, screenshots, test data or confidential documents are published here.*
+*Public portfolio summary only. Full reports, findings register, testing log, pull-request evidence, roadmap and presentation were submitted through the fellowship Career Passport.*
