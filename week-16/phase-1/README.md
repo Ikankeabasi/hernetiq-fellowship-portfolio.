@@ -1,37 +1,32 @@
-# Week 16 — Phase 1: Engagement Kickoff and Initial Assessment
+# Phase 1 — Engagement Kickoff and Initial Assessment
 
-**Evidence type:** Public, sanitised case-study summary  
-**Assessment setting:** Controlled capstone environment
+## Overview
 
-## Purpose
+Phase 1 of the HerNetIQ AI Security Fellowship capstone was a team-based, simulated security assessment of a financial technology platform with an AI-powered customer support capability.
 
-Phase 1 focused on how a security delivery team begins an unfamiliar engagement: agreeing how to work together, understanding the authorised scope, reviewing the available technical environment and communicating early observations responsibly.
+The goal was to understand the environment before drawing conclusions: agree the scope and team responsibilities, review the available technical materials, map the system and its trust boundaries, conduct controlled checks, and communicate early observations responsibly.
 
-The team established workstreams and responsibilities, reviewed available system and architecture materials, mapped components and trust boundaries, and carried out controlled assessment activities. The work was documented through a shared evidence-led process.
-
-## Activities
+## What the team did
 
 - Agreed team roles, responsibilities, workstreams and ways of working.
-- Reviewed the available application, architecture and infrastructure materials.
-- Considered data flows, system components, external dependencies and trust boundaries.
-- Performed controlled application, API, data-protection, AI and infrastructure security checks within the authorised environment.
-- Recorded test activity, observations, supporting evidence and provisional risk.
-- Prepared an interim client update describing the scope understood, progress, limitations and planned next steps.
+- Reviewed available application, architecture, configuration and infrastructure materials.
+- Mapped system components, data flows, data stores, external dependencies and trust boundaries.
+- Conducted controlled assessment activities across application and API security, customer-data protection, AI/model security and cloud infrastructure.
+- Recorded test activity, observations, supporting evidence, provisional severity, ownership and status in shared working records.
+- Prepared an interim assessment update describing the scope understood, work completed, limitations and planned next steps.
 
-## My role — Cloud and Infrastructure Security
+## My contribution — Cloud and Infrastructure Security
 
-My primary responsibility was the cloud and infrastructure workstream. I reviewed available infrastructure-as-code and configuration materials, considered cloud access controls and network-security design, documented observations, and contributed to evidence tracking and team reporting.
+My assigned responsibility was Cloud and Infrastructure Security. I reviewed six infrastructure-as-code files covering identity and permissions, storage, compute, networking/security groups, Terraform backend and environment configuration.
 
-I also supported wider collaboration, remediation discussions and the careful separation of verified evidence from assumptions or items requiring further confirmation.
+I examined the available cloud configuration and infrastructure design, documented observations for the shared assessment process, and contributed to the findings/evidence review and interim reporting. I also supported wider team coordination and discussions where infrastructure dependencies affected the overall assessment.
 
-## Approach and tools
+## Approach and learning
 
-The work used source-code and configuration review, infrastructure-as-code review, controlled testing, automated test execution, architecture mapping, version-controlled collaboration and structured evidence tracking.
+I used infrastructure-as-code and configuration review alongside the team's source-code review, controlled testing, architecture mapping and evidence-tracking process. I learned to avoid treating a configuration pattern or scanner result as a confirmed issue until its context and impact had been checked.
 
-## What I learned
+Phase 1 reinforced that a useful security assessment begins with clear scope, accurate system understanding, reproducible evidence and honest communication about uncertainty.
 
-Phase 1 strengthened my understanding that an effective assessment starts with scope, teamwork and evidence discipline. A finding should be supported by reproducible information, its potential business impact should be explained, and uncertainty should be stated rather than hidden.
+---
 
-## Public sharing boundary
-
-This summary intentionally excludes client and individual names, specific findings, finding identifiers, sensitive architecture details, source code, screenshots, test data, internal links and confidential engagement documents. Full Phase 1 evidence was submitted through the fellowship Career Passport as instructed by the tutor.
+*Public portfolio summary only. Full engagement records were submitted through the fellowship Career Passport. No organisation or individual names, specific findings, internal system details, code, screenshots or test data are published here.*
