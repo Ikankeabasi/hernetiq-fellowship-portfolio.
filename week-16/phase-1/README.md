@@ -28,5 +28,3 @@ I used infrastructure-as-code and configuration review alongside the team's sour
 Phase 1 reinforced that a useful security assessment begins with clear scope, accurate system understanding, reproducible evidence and honest communication about uncertainty.
 
 ---
-
-*Public portfolio summary only. Full engagement records were submitted through the fellowship Career Passport. No organisation or individual names, specific findings, internal system details, code, screenshots or test data are published here.*
