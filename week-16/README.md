@@ -39,5 +39,3 @@ This capstone strengthened my ability to carry security work from investigation 
 It reinforced that a security improvement is not complete simply because a code change has been made. Testing, review, deployment and verification all matter.
 
 ---
-
-*This is a public, sanitised summary of my learning and contribution. It does not disclose the organisation or individuals involved, specific assessment findings, internal system details, source code, screenshots, test data or confidential engagement documents.*
