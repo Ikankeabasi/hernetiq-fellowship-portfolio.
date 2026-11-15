@@ -14,7 +14,7 @@ The work was part of a simulated pre-investment security and AI-risk assessment.
 - Identified items that still required confirmation in the deployed environment.
 - Prepared technical findings and an executive-level summary.
 - Developed a practical 30/60/90-day security and AI-governance roadmap.
-- Prepared and delivered a final readout explaining the overall assessment, priorities, limitations and recommended next steps.
+- Prepared a final readout explaining the overall assessment, priorities, limitations and recommended next steps.
 
 ## My contribution — Cloud and Infrastructure Security
 
