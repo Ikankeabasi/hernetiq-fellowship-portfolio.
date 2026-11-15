@@ -1,70 +1,43 @@
-# Week 16 — Capstone Security Assessment
-
-**Programme:** HerNetIQ AI Security Fellowship  
-**Focus:** Collaborative security assessment, remediation planning and business communication
+# Week 16 — AI Security Capstone
 
 ## Overview
 
-This week documents a two-phase, team-based capstone completed in a controlled assessment environment. The work simulated a pre-investment security and AI-risk assessment of a fintech-style digital services platform that included an AI-powered customer support capability.
+I completed a two-phase, team-based capstone as part of the HerNetIQ AI Security Fellowship. The project simulated a pre-investment security and AI-risk assessment for a financial technology platform offering digital financial services and an AI-powered customer support assistant.
 
-The purpose was to practise how a security delivery team understands an unfamiliar technology environment, assesses risk, supports remediation and communicates security priorities to technical and business stakeholders.
+The work followed the kind of process a security team would use in a real engagement: understand the environment, assess how the system handles users and data, test security controls, document evidence, support remediation, and communicate practical next steps to technical and business stakeholders.
 
-This public portfolio page is a sanitised learning summary only. It intentionally excludes client and individual names, specific vulnerabilities or findings, sensitive architecture details, source code, screenshots, test data, internal links and confidential engagement records. Full assessment evidence was submitted separately through the fellowship Career Passport, in line with the tutor's instruction.
+## Phase 1 — Understand and assess
 
-## Phase 1 — Engagement Kickoff and Initial Assessment
+We began by organising the team, agreeing responsibilities and scope, and reviewing the available application, architecture, configuration and infrastructure materials. We mapped system components, data flows and trust boundaries, then carried out controlled checks across application and API security, customer-data protection, AI and model security, and cloud infrastructure.
 
-The first phase focused on establishing a structured team engagement and building an evidence-based understanding of the assessment environment.
+We maintained a shared evidence process through a findings register and testing log, considered the potential business impact of observations, and prepared an interim assessment update. We also distinguished confirmed test results from assumptions and items that required further verification.
 
-The team organised responsibilities and workstreams, clarified scope and ways of working, reviewed the available architecture and technical materials, and used controlled assessment activities to understand the application's components, data flows and trust boundaries.
+## Phase 2 — Remediate, verify and communicate
 
-Work methods included:
+In the second phase, we used the assessment work to prioritise improvements, support remediation through reviewable changes, examine available test and verification evidence, and prepare the final engagement outputs.
 
-- Reviewing application source code and configuration.
-- Mapping system components, data flows and trust boundaries from available evidence.
-- Conducting controlled security tests within the authorised assessment environment.
-- Recording test activity and supporting evidence in a structured team process.
-- Assessing potential business impact and documenting provisional risk.
-- Preparing an interim update to communicate progress, limitations and next steps.
+The team developed technical and executive-facing reporting, a practical 30/60/90-day security and AI-governance roadmap, and a final readout. We kept a clear distinction between a change prepared in code, a change tested in the available environment, and a change confirmed as deployed. Where live-environment access or evidence was unavailable, that limitation remained explicit.
 
-### My contribution
+## My contribution
 
-My primary workstream was **Cloud and Infrastructure Security**. I reviewed infrastructure-as-code and cloud configuration from the materials made available to the team, considered access-control and network-security design, documented observations and supported the team's evidence tracking, remediation discussions and reporting.
+I served as **Team Lead for Cloud and Infrastructure Security**.
 
-I also contributed to wider team collaboration and helped maintain a clear distinction between an observed issue, a proposed change and a result that had been independently verified.
+My work included reviewing infrastructure-as-code and configuration across cloud identity and permissions, storage, compute, networking and Terraform settings. I assessed cloud access-control and network-security design, documented infrastructure observations, and contributed to the team's evidence tracking and client-facing updates.
 
-## Phase 2 — Remediation, Verification and Final Readout
+I also supported work beyond my primary stream. I participated in cross-workstream testing and verification using synthetic accounts, helped review application and AI-related security behaviour, followed remediation discussions and available pull-request evidence, and contributed to the shared reporting and roadmap. I helped keep the team's conclusions tied to evidence and made sure that unresolved verification gaps were not presented as completed fixes.
 
-The second phase built on the initial assessment. The team consolidated and prioritised its assessment work, discussed and supported remediation activities, reviewed available change and test evidence, and prepared client-facing outputs.
+## Methods and tools
 
-The phase included:
+The work combined source-code and configuration review, infrastructure-as-code review, architecture and trust-boundary mapping, controlled application and API testing, automated test execution, scanner-output triage, version-controlled collaboration and structured evidence tracking.
 
-- Prioritising security and AI-risk improvements according to potential business impact.
-- Supporting remediation through controlled, reviewable engineering changes.
-- Reviewing regression-test and verification evidence.
-- Identifying items that still required client-side or deployed-environment confirmation.
-- Preparing technical and executive-level reporting.
-- Developing a practical 30/60/90-day security and AI-governance roadmap.
-- Communicating the overall assessment, limitations, priorities and recommended next steps in a final readout.
+Tools and working environments included GitHub, GitHub Codespaces, Terraform, Python/pytest, and security-scanning tools used during the team review. Automated results were considered alongside manual review and the context of the system rather than treated as proof on their own.
 
-My contribution continued through the Cloud and Infrastructure Security workstream, including infrastructure remediation discussions, review of proposed changes and clear reporting of what the available evidence did—and did not—confirm.
+## What I took away
 
-The assessment was conducted in a controlled environment. A code change or passing test was not treated as proof of production deployment or live-environment security.
+This capstone strengthened my ability to carry security work from investigation through remediation planning and communication. I learned to assess technical issues in terms of their possible effect on customers and the business, collaborate across different security disciplines, and explain clearly what the evidence proves—and what still needs to be verified.
 
-## Team Approach and Methods
+It also reinforced that a security improvement is not complete simply because a code change has been made. Testing, review, deployment and verification all matter.
 
-The capstone reinforced the importance of working across connected security disciplines rather than assessing each component in isolation. The team approach brought together application and API security, data protection, AI and model security, cloud infrastructure, evidence management and reporting.
+---
 
-Methods and tools included source-code and configuration review, infrastructure-as-code review, controlled API and application testing, automated test execution, architecture and trust-boundary mapping, version-controlled collaboration, and structured evidence tracking.
-
-## Key Learning Outcomes
-
-- Security assessments must be grounded in reproducible evidence, not assumptions.
-- Technical weaknesses should be explained in terms of customer, operational and business impact.
-- Security work requires collaboration across application, data, AI and infrastructure disciplines.
-- Remediation is not complete merely because a code or configuration change exists; the change must be tested and its deployment and effectiveness verified.
-- Clear reporting helps technical teams and business decision-makers understand risk and agree on practical next steps.
-
-## Evidence and Confidentiality
-
-This README is the only public case-study summary for the capstone. It is not the technical assessment report and does not reproduce the engagement evidence. Full team and individual deliverables are maintained in the fellowship Career Passport submission area, not in this public repository.
-
+*This is a public, sanitised summary of my learning and contribution. It does not disclose the organisation or individuals involved, specific assessment findings, internal system details, source code, screenshots, test data or confidential engagement documents.*
